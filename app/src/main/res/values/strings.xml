@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Ruta+</string>
+    <string name="olvidaste_tu_contrase_a">¿Olvidaste tu contraseña?</string>
+    <string name="Ingresar">Ingresar</string>
+    <string name="Contraseña">Contraseña</string>
+    <string name="Correo">Correo</string>
+    <string name="cerrar_sesi_n">Cerrar Sesión</string>
+    <string name="scan_qr">Scan QR</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="finalizar_ruta">Finalizar Ruta</string>
+</resources>
