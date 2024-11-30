@@ -11,7 +11,7 @@ import com.example.transportistaapp.data.FirebaseErrorUtils
 class AuthViewModel : ViewModel() {
     private val authRepository = AuthRepository()
 
-    // Estado del inicio de sesión
+    // Estado del inicio de sesion
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
 
