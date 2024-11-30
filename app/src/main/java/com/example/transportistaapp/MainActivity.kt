@@ -8,21 +8,12 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
-import com.example.transportistaapp.R
 import com.example.transportistaapp.viewmodel.AuthViewModel
 import com.example.transportistaapp.viewmodel.LoginState
 import com.example.transportistaapp.ui.DashboardActivity
-import kotlinx.coroutines.flow.collect
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -44,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
 
             if (email.isBlank() || password.isBlank()) {
-                statusTextView.text = "Por favor, completa todos los campos."
+                statusTextView.text = getString(R.string.COMPLETAR_TODOS_LOS_CAMPOS)
                 statusTextView.visibility = TextView.VISIBLE
                 return@setOnClickListener
             }
@@ -58,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                 authViewModel.loginState.collect { state ->
                     when (state) {
                         is LoginState.Loading -> {
-                            statusTextView.text = "Cargando..."
+                            statusTextView.text = getString(R.string.CARGANDO)
                             statusTextView.visibility = TextView.VISIBLE
                         }
                         is LoginState.Success -> {
@@ -67,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                             finish()
                         }
                         is LoginState.Failure -> {
-                            statusTextView.text = "Error: ${state.error}"
+                            statusTextView.text = getString(R.string.ERROR, state.error)
                             statusTextView.visibility = TextView.VISIBLE
                         }
                         LoginState.Idle -> {

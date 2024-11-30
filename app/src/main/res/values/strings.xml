@@ -1,4 +1,4 @@
-<resources>
+<resources >
     <string name="app_name">Ruta+</string>
     <string name="olvidaste_tu_contrase_a">¿Olvidaste tu contraseña?</string>
     <string name="Ingresar">Ingresar</string>
@@ -8,4 +8,7 @@
     <string name="scan_qr">Scan QR</string>
     <string name="actualizar">Actualizar</string>
     <string name="finalizar_ruta">Finalizar Ruta</string>
+    <string name="CARGANDO">Cargando…</string>
+    <string name="ERROR">Error: %1$s</string>
+    <string name="COMPLETAR_TODOS_LOS_CAMPOS">Por favor, completa todos los campos.</string>
 </resources>

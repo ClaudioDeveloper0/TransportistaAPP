@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "11279543800",
-    "project_id": "fir-app-120f7",
-    "storage_bucket": "fir-app-120f7.firebasestorage.app"
+    "project_number": "239961774858",
+    "project_id": "seguirmipedido",
+    "storage_bucket": "seguirmipedido.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:11279543800:android:5e3bf375ad5c84a934fa0d",
+        "mobilesdk_app_id": "1:239961774858:android:d4647ee8cc852f57f3b8f3",
         "android_client_info": {
           "package_name": "com.example.transportistaapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBcwRP4Veg39jxH0JH9dDVFIgCvLAbsJN4"
+          "current_key": "AIzaSyAdDqwEsUV0j82ecop6-O1ZAQW3G1KxlJA"
         }
       ],
       "services": {

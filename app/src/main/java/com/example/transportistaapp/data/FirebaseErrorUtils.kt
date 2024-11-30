@@ -1,6 +1,5 @@
 package com.example.transportistaapp.data
 
-
 import com.google.firebase.auth.FirebaseAuthException
 
 object FirebaseErrorUtils {
@@ -10,7 +9,8 @@ object FirebaseErrorUtils {
                 when (exception.errorCode) {
                     "ERROR_INVALID_EMAIL" -> "El correo no tiene un formato válido."
                     "ERROR_USER_NOT_FOUND" -> "Usuario no encontrado."
-                    "ERROR_WRONG_PASSWORD" -> "Contraseña incorrecta."
+                    "ERROR_WRONG_PASSWORD" -> "Contraseña incorrecta"
+                    "ERROR_INVALID_CREDENTIAL" -> "Credenciales Inválidas"
                     else -> "Error de autenticación: ${exception.errorCode}"
                 }
             }

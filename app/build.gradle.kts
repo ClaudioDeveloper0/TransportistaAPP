@@ -54,14 +54,14 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // ViewModel y LiveData
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation (libs.androidx.lifecycle.livedata.ktx)
 
     // Firebase (para Firestore y Authentication)
-    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
-    implementation ("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-analytics")
-    implementation ("com.google.firebase:firebase-firestore-ktx")
+    implementation(platform(libs.firebase.bom))
+    implementation (libs.firebase.auth.ktx)
+    implementation(libs.firebase.analytics)
+    implementation (libs.firebase.firestore.ktx)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
