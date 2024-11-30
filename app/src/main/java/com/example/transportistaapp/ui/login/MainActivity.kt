@@ -1,4 +1,4 @@
-package com.example.transportistaapp
+package com.example.transportistaapp.ui.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,13 +8,14 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.transportistaapp.viewmodel.AuthViewModel
-import com.example.transportistaapp.viewmodel.LoginState
-import com.example.transportistaapp.ui.DashboardActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.transportistaapp.R
+import com.example.transportistaapp.ui.homeTransportista.DashboardActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val authViewModel: AuthViewModel by viewModels()
 

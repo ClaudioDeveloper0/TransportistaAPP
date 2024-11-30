@@ -1,15 +1,20 @@
-package com.example.transportistaapp.viewmodel
+package com.example.transportistaapp.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.transportistaapp.data.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.example.transportistaapp.data.FirebaseErrorUtils
+import com.example.transportistaapp.domain.useCases.LoginTransportista
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AuthViewModel : ViewModel() {
-    private val authRepository = AuthRepository()
+
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    val loginTransportista: LoginTransportista
+) : ViewModel() {
 
     // Estado del inicio de sesion
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
@@ -21,7 +26,7 @@ class AuthViewModel : ViewModel() {
             _loginState.value = LoginState.Loading
             try {
 
-                val user = authRepository.login(email, password)
+                val user = loginTransportista(email, password)
 
                 if (user != null) {
                     _loginState.value = LoginState.Success(user.email)
@@ -38,8 +43,8 @@ class AuthViewModel : ViewModel() {
 
 // Clases para representar el estado del login
 sealed class LoginState {
-    object Idle : LoginState()
-    object Loading : LoginState()
+    data object Idle : LoginState()
+    data object Loading : LoginState()
     data class Success(val email: String?) : LoginState()
     data class Failure(val error: String) : LoginState()
 }
