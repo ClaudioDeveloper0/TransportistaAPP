@@ -10,41 +10,33 @@ import com.example.transportistaapp.domain.useCases.LoginTransportista
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
-class AuthViewModel @Inject constructor(
-    val loginTransportista: LoginTransportista
+class LoginViewModel @Inject constructor(
+    private val loginTransportista: LoginTransportista
 ) : ViewModel() {
 
-    // Estado del inicio de sesion
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
 
-    // Intentar iniciar sesión
     fun login(email: String, password: String) {
+        if (email.isBlank() || password.isBlank()) {
+            _loginState.value = LoginState.Failure("Completar todos los campos")
+            return
+        }
+
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
             try {
-
                 val user = loginTransportista(email, password)
-
-                if (user != null) {
-                    _loginState.value = LoginState.Success(user.email)
+                _loginState.value = if (user != null) {
+                    LoginState.Success
                 } else {
-                    _loginState.value = LoginState.Failure("Usuario no encontrado")
+                    LoginState.Failure("Usuario no encontrado")
                 }
             } catch (e: Exception) {
                 _loginState.value = LoginState.Failure(FirebaseErrorUtils.getErrorMessage(e))
-
             }
         }
     }
 }
 
-// Clases para representar el estado del login
-sealed class LoginState {
-    data object Idle : LoginState()
-    data object Loading : LoginState()
-    data class Success(val email: String?) : LoginState()
-    data class Failure(val error: String) : LoginState()
-}

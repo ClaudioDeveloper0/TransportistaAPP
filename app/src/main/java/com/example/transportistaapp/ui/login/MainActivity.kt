@@ -17,58 +17,52 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val authViewModel: AuthViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         val emailEditText = findViewById<EditText>(R.id.email)
         val passwordEditText = findViewById<EditText>(R.id.password)
         val loginButton = findViewById<Button>(R.id.login_button)
         val statusTextView = findViewById<TextView>(R.id.statusTextView)
 
-        // Validar que los campos no estén vacíos
         loginButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
-
-            if (email.isBlank() || password.isBlank()) {
-                statusTextView.text = getString(R.string.COMPLETAR_TODOS_LOS_CAMPOS)
-                statusTextView.visibility = TextView.VISIBLE
-                return@setOnClickListener
-            }
-
-            authViewModel.login(email, password)
+            loginViewModel.login(email, password)
         }
 
-        // Usar repeatOnLifecycle para recoger los flujos de estado de LoginState
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.loginState.collect { state ->
+                loginViewModel.loginState.collect { state ->
                     when (state) {
-                        is LoginState.Loading -> {
+                        LoginState.Idle -> {
+                            statusTextView.text = ""
+                            statusTextView.visibility = TextView.GONE
+                        }
+                        LoginState.Loading -> {
                             statusTextView.text = getString(R.string.CARGANDO)
                             statusTextView.visibility = TextView.VISIBLE
                         }
                         is LoginState.Success -> {
-                            val intent = Intent(this@MainActivity, DashboardActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            navigateToDashboard()
                         }
                         is LoginState.Failure -> {
-                            statusTextView.text = getString(R.string.ERROR, state.error)
+                            statusTextView.text = state.error
                             statusTextView.visibility = TextView.VISIBLE
-                        }
-                        LoginState.Idle -> {
-                            statusTextView.text = ""
-                            statusTextView.visibility = TextView.GONE
                         }
                     }
                 }
             }
         }
+    }
 
+    private fun navigateToDashboard() {
+        val intent = Intent(this, DashboardActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
+
