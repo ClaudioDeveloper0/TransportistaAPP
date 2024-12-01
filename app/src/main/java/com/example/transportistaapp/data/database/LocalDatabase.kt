@@ -9,7 +9,7 @@ import com.example.transportistaapp.data.database.entities.*
 @Database(
     entities = [
         PaqueteEntity::class,
-        RutaEntity::class
+        RutaEntity::class,
     ],
     version = 1,
     exportSchema = false

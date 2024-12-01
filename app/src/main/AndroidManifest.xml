@@ -5,6 +5,11 @@
     <!-- Permisos -->
 
 
+    <!-- general location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- precise location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <!-- Permisos -->
     <application
         android:allowBackup="true"

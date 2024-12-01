@@ -6,13 +6,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.example.transportistaapp.data.FirebaseErrorUtils
-import com.example.transportistaapp.domain.useCases.LoginTransportista
+import com.example.transportistaapp.domain.useCases.LoginTransportistaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginTransportista: LoginTransportista
+    private val loginTransportistaUseCase: LoginTransportistaUseCase
 ) : ViewModel() {
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
             try {
-                val user = loginTransportista(email, password)
+                val user = loginTransportistaUseCase(email, password)
                 _loginState.value = if (user != null) {
                     LoginState.Success
                 } else {
