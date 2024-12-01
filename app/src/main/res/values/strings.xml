@@ -11,4 +11,5 @@
     <string name="CARGANDO">Cargando…</string>
     <string name="ERROR">Error: %1$s</string>
     <string name="COMPLETAR_TODOS_LOS_CAMPOS">Por favor, completa todos los campos.</string>
+    <string name="INICIAR_ENTREGAS">Iniciar Entregas</string>
 </resources>
