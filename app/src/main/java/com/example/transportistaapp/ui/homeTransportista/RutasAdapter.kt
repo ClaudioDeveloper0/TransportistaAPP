@@ -1,10 +1,12 @@
 package com.example.transportistaapp.ui.homeTransportista
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.transportistaapp.R
 import com.example.transportistaapp.domain.model.RutaT
 
 class RutasAdapter : RecyclerView.Adapter<RutasAdapter.RutaViewHolder>() {
