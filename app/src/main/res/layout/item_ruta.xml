@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
+    android:id="@+id/parent"
     android:background="@android:color/white">
 
     <TextView
@@ -13,6 +14,16 @@
         android:text="Nombre de la ruta"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
+        android:paddingBottom="4dp" />
+    <TextView
+        android:id="@+id/tvCantidadPaquetes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="55 paquetes"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         android:paddingBottom="4dp" />
 
     <TextView

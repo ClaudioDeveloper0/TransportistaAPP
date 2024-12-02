@@ -1,33 +1,35 @@
 package com.example.transportistaapp.ui.homeTransportista
 
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.transportistaapp.R
+import com.example.transportistaapp.databinding.ActivityDashboardBinding
+import com.example.transportistaapp.ui.homeTransportista.adapter.RutasAdapter
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class DashboardActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityDashboardBinding
     private lateinit var viewModel: RoutesViewModel
     private lateinit var rutasAdapter: RutasAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
+        binding = ActivityDashboardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        // Inicializamos el ViewModel y el adapter
         viewModel = ViewModelProvider(this)[RoutesViewModel::class.java]
         rutasAdapter = RutasAdapter()
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewRutas)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = rutasAdapter
+        // Configuración del RecyclerView usando ViewBinding
+        binding.recyclerViewRutas.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewRutas.adapter = rutasAdapter
 
-        val btnIniciarEntregas = findViewById<Button>(R.id.btnIniciarEntregas)
+        // Configuración del botón usando ViewBinding
+        val btnIniciarEntregas = binding.btnIniciarEntregas
 
         // Observar las rutas activas
         viewModel.rutas.observe(this) { rutas ->
@@ -35,7 +37,7 @@ class DashboardActivity : AppCompatActivity() {
             btnIniciarEntregas.isEnabled = rutas.any { it.validado || it.cargado }
         }
 
-        // Cargar rutas activas (usa el UID correcto)
-        viewModel.cargarRutas("UID_TRANSPORTISTA")
+        // Cargar rutas activas
+        viewModel.cargarRutas()
     }
 }

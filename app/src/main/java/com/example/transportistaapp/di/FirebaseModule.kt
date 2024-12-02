@@ -1,7 +1,7 @@
 package com.example.transportistaapp.di
 
 import com.example.transportistaapp.data.RepositoryImpl
-import com.example.transportistaapp.data.network.UsersDao
+import com.example.transportistaapp.data.network.FirestoreService
 import com.example.transportistaapp.domain.Repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,7 +24,8 @@ object FirebaseModule {
     fun proveerFirestore() = FirebaseFirestore.getInstance()
 
     @Provides
-    fun proveerRepositorio(usersDao:UsersDao, firebaseFirestore: FirebaseFirestore, firebaseAuth:FirebaseAuth) : Repository {
-        return RepositoryImpl(usersDao, firebaseFirestore, firebaseAuth)
+    fun proveerRepositorio(firestoreService: FirestoreService, firebaseAuth:FirebaseAuth) : Repository {
+        return RepositoryImpl(
+            firestoreService, firebaseAuth)
     }
 }
