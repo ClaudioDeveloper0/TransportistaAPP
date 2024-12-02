@@ -78,6 +78,9 @@ dependencies {
     //mapBox
     implementation(libs.android)
 
+    //fragments
+    implementation(libs.androidx.fragment.ktx)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)

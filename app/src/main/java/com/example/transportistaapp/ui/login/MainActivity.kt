@@ -2,8 +2,6 @@ package com.example.transportistaapp.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.transportistaapp.R
+import com.example.transportistaapp.databinding.ActivityMainBinding
 import com.example.transportistaapp.ui.homeTransportista.DashboardActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -18,19 +17,17 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
+    private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val emailEditText = findViewById<EditText>(R.id.email)
-        val passwordEditText = findViewById<EditText>(R.id.password)
-        val loginButton = findViewById<Button>(R.id.login_button)
-        val statusTextView = findViewById<TextView>(R.id.statusTextView)
 
-        loginButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
+        binding.btnLogin.setOnClickListener {
+            val email = binding.etEmail.text.toString()
+            val password = binding.etPassword.text.toString()
             loginViewModel.login(email, password)
         }
 
@@ -39,19 +36,19 @@ class MainActivity : AppCompatActivity() {
                 loginViewModel.loginState.collect { state ->
                     when (state) {
                         LoginState.Idle -> {
-                            statusTextView.text = ""
-                            statusTextView.visibility = TextView.GONE
+                            binding.tvStatus.text = ""
+                            binding.tvStatus.visibility = TextView.GONE
                         }
                         LoginState.Loading -> {
-                            statusTextView.text = getString(R.string.CARGANDO)
-                            statusTextView.visibility = TextView.VISIBLE
+                            binding.tvStatus.text = getString(R.string.CARGANDO)
+                            binding.tvStatus.visibility = TextView.VISIBLE
                         }
                         is LoginState.Success -> {
                             navigateToDashboard()
                         }
                         is LoginState.Failure -> {
-                            statusTextView.text = state.error
-                            statusTextView.visibility = TextView.VISIBLE
+                            binding.tvStatus.text = state.error
+                            binding.tvStatus.visibility = TextView.VISIBLE
                         }
                     }
                 }

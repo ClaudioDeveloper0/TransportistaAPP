@@ -1,11 +1,13 @@
 package com.example.transportistaapp.ui.homeTransportista
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.transportistaapp.databinding.ActivityDashboardBinding
 import com.example.transportistaapp.ui.homeTransportista.adapter.RutasAdapter
+import com.example.transportistaapp.ui.pantallaReparto.RepartoActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,8 +35,13 @@ class DashboardActivity : AppCompatActivity() {
 
         // Observar las rutas activas
         viewModel.rutas.observe(this) { rutas ->
+            if (rutas.any { it.enReparto }) {
+                val intent = Intent(this, RepartoActivity::class.java) // Reemplaza `NuevaActivity` con el nombre de tu actividad destino
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+            }
             rutasAdapter.submitList(rutas)
-            btnIniciarEntregas.isEnabled = rutas.any { it.validado || it.cargado }
+            btnIniciarEntregas.isEnabled = rutas.any { it.completado || it.cargado }
         }
 
         // Cargar rutas activas

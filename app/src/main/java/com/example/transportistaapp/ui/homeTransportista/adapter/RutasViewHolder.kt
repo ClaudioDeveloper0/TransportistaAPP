@@ -12,15 +12,15 @@ class RutasViewHolder(view: View, private val context: Context) :
     RecyclerView.ViewHolder(view) {
 
     private val binding = ItemRutaBinding.bind(view)
-    val parent = binding.parent
+    private val parent = binding.parent
 
     fun render(ruta : Ruta){
         binding.tvRutaNombre.text = ruta.nombre
-        binding.tvRutaEstado.text = if (ruta.validado || ruta.cargado) "Cargada" else "Pendiente"
+        binding.tvRutaEstado.text = if (ruta.completado || ruta.cargado) "Cargada" else "Pendiente"
         binding.tvCantidadPaquetes.text =
             context.getString(R.string.x_paquetes, ruta.paquetes.count().toString())
         parent.setBackgroundColor(
-            if (ruta.validado || ruta.cargado) Color.GREEN else Color.LTGRAY
+            if (ruta.completado || ruta.cargado) Color.GREEN else Color.LTGRAY
         )
     }
 

@@ -1,10 +1,16 @@
 package com.example.transportistaapp.domain.model
 
+import java.util.Date
+
+
 data class Paquete (
     val id : String,
-    val contacto : String,
     val direccion : String,
-    val receptor : String,
     val ruta : String,
-    val estado : String,
+    var contacto : String,
+    var receptor : String,
+    var estado : String,
+    var fecha : Date = Date(),
+    var detalles : String = "",
 )
+

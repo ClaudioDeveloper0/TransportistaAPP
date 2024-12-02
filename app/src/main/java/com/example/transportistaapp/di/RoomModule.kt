@@ -18,6 +18,7 @@ object RoomModule {
 
 
     @Singleton
+    @Provides
     fun proveerRoom(@ApplicationContext context : Context) =
         Room.databaseBuilder(context, LocalDatabase::class.java, DATABASE_NAME).build()
 

@@ -13,4 +13,6 @@
     <string name="COMPLETAR_TODOS_LOS_CAMPOS">Por favor, completa todos los campos.</string>
     <string name="INICIAR_ENTREGAS">Iniciar Entregas</string>
     <string name="x_paquetes">%1$s Paquetes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

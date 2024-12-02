@@ -4,16 +4,21 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.example.transportistaapp.domain.model.Paquete
 import com.example.transportistaapp.domain.model.Ruta
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.WriteBatch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class FirestoreService @Inject constructor(private val db:FirebaseFirestore){
+class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
 
-    suspend fun obtenerRutasPorTrabajador(uid: String) : List<Ruta>{
+    suspend fun obtenerRutasPorTrabajador(uid: String): List<Ruta> {
         val rutasSnapshot = db.collection("Rutas")
             .whereEqualTo("transportista", uid)
+            .whereEqualTo("activa", true)
             .get()
             .await()
 
@@ -22,7 +27,8 @@ class FirestoreService @Inject constructor(private val db:FirebaseFirestore){
                 id = d.id,
                 nombre = d.getString("alias") ?: "",
                 cargado = d.getBoolean("cargado") ?: false,
-                validado = d.getBoolean("validado") ?: false
+                completado = d.getBoolean("validado") ?: false,
+                enReparto = d.getBoolean("en_reparto") ?: false
             )
         }
 
@@ -61,11 +67,11 @@ class FirestoreService @Inject constructor(private val db:FirebaseFirestore){
         rutas.forEach { ruta ->
             ruta.paquetes = paquetesPorRuta[ruta.id] ?: emptyList()
         }
-        Log.d("maybeaLog", rutas.toString())
 
         return rutas
 
     }
+
     suspend fun esTransportista(user: FirebaseUser): Boolean {
         return try {
             val document = db.collection("Usuarios").document(user.uid).get().await()
@@ -76,4 +82,41 @@ class FirestoreService @Inject constructor(private val db:FirebaseFirestore){
             false
         }
     }
+
+    suspend fun terminarRutas(rutas: List<Ruta>) {
+        rutas.forEach {
+            val data = hashMapOf(
+                "en_reparto" to false,
+                "activa" to false,
+                "cargado" to false,
+                "completado" to true,
+            )
+            db.collection("Rutas").document(it.id)
+                .set(data, SetOptions.merge()).await()
+        }
+    }
+
+    suspend fun terminarPaquetes(paquetes: List<Paquete>) {
+        val batchSize = 500
+        paquetes.chunked(batchSize).forEach { paqueteChunk ->
+            val batch: WriteBatch = db.batch()
+            paqueteChunk.forEach { paquete ->
+                val docRef = db.collection("Rutas").document(paquete.id)
+                val historial = hashMapOf(
+                    "detalles" to paquete.detalles,
+                    "estado" to paquete.estado,
+                    "fecha" to Timestamp(paquete.fecha)
+                )
+                batch.update(
+                    docRef,
+                    "estado", paquete.estado,
+                    "contacto", paquete.contacto,
+                    "receptor", paquete.receptor,
+                    "historial", FieldValue.arrayUnion(historial)
+                )
+            }
+            batch.commit().await()
+        }
+    }
+
 }

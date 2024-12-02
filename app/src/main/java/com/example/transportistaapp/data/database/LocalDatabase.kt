@@ -2,6 +2,7 @@ package com.example.transportistaapp.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.transportistaapp.data.database.dao.*
 import com.example.transportistaapp.data.database.entities.*
 
@@ -14,6 +15,7 @@ import com.example.transportistaapp.data.database.entities.*
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converter::class)
 abstract class LocalDatabase : RoomDatabase() {
 
     abstract fun getPaqueteDao():PaqueteDao
