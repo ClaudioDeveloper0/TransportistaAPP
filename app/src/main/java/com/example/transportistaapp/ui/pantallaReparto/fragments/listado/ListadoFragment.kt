@@ -11,11 +11,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.transportistaapp.R
 import com.example.transportistaapp.databinding.FragmentListadoBinding
 import com.example.transportistaapp.domain.model.Paquete
 import com.example.transportistaapp.ui.pantallaReparto.fragments.listado.adapter.ListadoAdapter
-import com.example.transportistaapp.ui.pantallaReparto.fragments.mapa.MapaFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -47,25 +45,21 @@ class ListadoFragment : Fragment() {
         initUIState()
     }
     private fun initPaquetes() {
-        listadoAdapter = ListadoAdapter() { paquete ->
-            val mapaFragment = MapaFragment().apply {
-                arguments = Bundle().apply {
-                    putString("paqueteId", paquete.id)
-                }
-            }
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, mapaFragment) // Asegúrate de usar el contenedor correcto
-                .addToBackStack(null)
-                .commit()
-
+        listadoAdapter = ListadoAdapter() { dato ->
+//            val mapaFragment = MapaFragment().apply {  // aqui cambia MapaFragment por el fragmento a donde quieras redirccionar
+//                arguments = Bundle().apply {
+//                    putString("paqueteId", dato.id) //esto son parametros que le puedes pasar
+//                }
+//            }
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragmentContainer, mapaFragment) // aquí tienes que meter el fragmento
+//                .addToBackStack(null)
+//                .commit()
         }
         binding.rvPaquetes.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = listadoAdapter
         }
-    }
-    private fun redireccionMapa(paquete: Paquete) {
-
     }
     private fun initUIState() {
         viewLifecycleOwner.lifecycleScope.launch {
