@@ -8,7 +8,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.add
 import com.example.transportistaapp.R
 import com.example.transportistaapp.databinding.ActivityRepartoBinding
-import com.example.transportistaapp.ui.pantallaReparto.fragments.ListadoFragment
+import com.example.transportistaapp.ui.pantallaReparto.fragments.listado.ListadoFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

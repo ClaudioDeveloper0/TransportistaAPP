@@ -15,4 +15,7 @@
     <string name="x_paquetes">%1$s Paquetes</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logoContentDescription">Logo</string>
+    <string name="terminar_entrega">Terminar entrega</string>
+    <string name="ver_ruta">Ver ruta</string>
 </resources>

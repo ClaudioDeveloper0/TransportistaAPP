@@ -76,7 +76,10 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     //mapBox
-    implementation(libs.android)
+    implementation("com.mapbox.maps:android:11.8.0")
+    implementation("com.mapbox.navigationcore:android:3.6.0-beta.1")
+    implementation("com.mapbox.navigationcore:ui-components:3.6.0-beta.1")
+
 
     //fragments
     implementation(libs.androidx.fragment.ktx)

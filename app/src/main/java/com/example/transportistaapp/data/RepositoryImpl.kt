@@ -58,10 +58,11 @@ class RepositoryImpl @Inject constructor(
                 paquetesEntity.addAll(ruta.paquetes.map { it.toRoom() })
             }
             rutasEntity.addAll(rutas.map { it.toRoom() })
-            paqueteDao.deleteAll()
-            paqueteDao.insertAll(paquetesEntity)
             rutaDao.deleteAll()
+            paqueteDao.deleteAll()
             rutaDao.insertAll(rutasEntity)
+            paqueteDao.insertAll(paquetesEntity)
+
 
             return rutas
         }
