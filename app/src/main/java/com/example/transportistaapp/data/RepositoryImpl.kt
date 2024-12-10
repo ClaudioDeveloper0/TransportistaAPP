@@ -98,4 +98,12 @@ class RepositoryImpl @Inject constructor(
         firestoreService.terminarRutas(rutas.map {it.toDomain()})
         firestoreService.terminarPaquetes(paquetes.map { it.toDomain() })
     }
+
+    override suspend fun getPaquetesByRoute(routeId: String): List<Paquete> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updatePaqueteStatus(paqueteId: String, nuevoEstado: String) {
+        TODO("Not yet implemented")
+    }
 }

@@ -31,11 +31,14 @@
         android:id="@+id/recyclerViewRutas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/btnIniciarEntregas"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="20dp" />
+
+
+
 
     <!-- tu mapita del culo MAPBOX AQUI u.u -->
 

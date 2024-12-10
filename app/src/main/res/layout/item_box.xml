@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Nombre de la caja -->
+    <TextView
+        android:id="@+id/tvBoxName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre de la Caja"
+        android:textSize="16sp" />
+
+    <!-- Estado de la caja -->
+    <TextView
+        android:id="@+id/tvBoxStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estado de la Caja"
+        android:textSize="14sp" />
+
+    <!-- Botón para validar -->
+    <Button
+        android:id="@+id/btnValidate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Validar" />
+</LinearLayout>

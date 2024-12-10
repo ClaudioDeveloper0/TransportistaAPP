@@ -70,15 +70,22 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
+    // Retrofit para hacer solicitudes HTTP
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // Convertidor para Gson (si estás utilizando Gson para convertir los datos de JSON a objetos Kotlin)
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Coroutines para manejar llamadas asíncronas (si no lo has agregado aún)
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+
     // Room
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
     //mapBox
-    implementation("com.mapbox.maps:android:11.8.0")
-    implementation("com.mapbox.navigationcore:android:3.6.0-beta.1")
-    implementation("com.mapbox.navigationcore:ui-components:3.6.0-beta.1")
+
 
 
     //fragments

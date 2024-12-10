@@ -17,4 +17,9 @@ interface Repository {
     suspend fun obtenerPaquetesNoEntregados() : List<Paquete>?
 
     suspend fun terminarEntrega()
+
+    suspend fun getPaquetesByRoute(routeId: String): List<Paquete>
+
+    suspend fun updatePaqueteStatus(paqueteId: String, nuevoEstado: String)
+
 }
