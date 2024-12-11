@@ -7,6 +7,7 @@ import com.example.transportistaapp.data.database.entities.RutaEntity
 import com.example.transportistaapp.data.database.entities.toDomain
 import com.example.transportistaapp.data.database.entities.toRoom
 import com.example.transportistaapp.data.network.FirestoreService
+import com.example.transportistaapp.data.network.RutasApi
 import com.example.transportistaapp.domain.Repository
 import com.example.transportistaapp.domain.model.Paquete
 import com.example.transportistaapp.domain.model.Ruta
@@ -22,7 +23,7 @@ class RepositoryImpl @Inject constructor(
     private val rutaDao: RutaDao,
     private val paqueteDao: PaqueteDao
 
-) : Repository {
+) : Repository{
     override suspend fun loginTransportista(user: String, password: String): FirebaseUser? {
         try {
             val result = firebaseAuth.signInWithEmailAndPassword(user, password).await()
@@ -106,4 +107,5 @@ class RepositoryImpl @Inject constructor(
     override suspend fun updatePaqueteStatus(paqueteId: String, nuevoEstado: String) {
         TODO("Not yet implemented")
     }
+
 }

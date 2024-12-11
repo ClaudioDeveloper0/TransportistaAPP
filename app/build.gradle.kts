@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    id ("dagger.hilt.android.plugin")
 
 }
 
@@ -70,6 +70,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
+    implementation("com.google.android.gms:play-services-location:21.0.1") // Example for location services
+
     // Retrofit para hacer solicitudes HTTP
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
 
@@ -78,6 +80,10 @@ dependencies {
 
     // Coroutines para manejar llamadas asíncronas (si no lo has agregado aún)
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    implementation ("com.google.android.gms:play-services-auth:20.0.0") // versión reciente
 
     // Room
     //noinspection KaptUsageInsteadOfKsp

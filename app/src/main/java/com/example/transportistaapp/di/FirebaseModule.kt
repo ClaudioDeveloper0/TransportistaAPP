@@ -28,6 +28,7 @@ object FirebaseModule {
     @Provides
     fun proveerRepositorio(firestoreService: FirestoreService, firebaseAuth:FirebaseAuth, rutaDao: RutaDao, paqueteDao: PaqueteDao) : Repository {
         return RepositoryImpl(
-            firestoreService, firebaseAuth, rutaDao, paqueteDao)
+            firestoreService, firebaseAuth, rutaDao, paqueteDao
+        )
     }
 }

@@ -10,6 +10,7 @@ import com.example.transportistaapp.ui.homeTransportista.adapter.RutasAdapter
 import com.example.transportistaapp.ui.pantallaReparto.RepartoActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.Observer
 
 @AndroidEntryPoint
 class DashboardActivity : AppCompatActivity() {
@@ -23,40 +24,39 @@ class DashboardActivity : AppCompatActivity() {
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inicializamos el ViewModel y el adapter
+        // Inicializar ViewModel
         viewModel = ViewModelProvider(this).get(RoutesViewModel::class.java)
-        rutasAdapter = RutasAdapter()
 
-        // Configuración del RecyclerView usando ViewBinding
+        // Configurar RecyclerView
+        rutasAdapter = RutasAdapter()
         binding.recyclerViewRutas.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewRutas.adapter = rutasAdapter
 
-/*
-    // Observar las rutas activas
-     viewModel.rutas.observe(this, Observer { rutas ->
-         // Comprobar si alguna ruta está en reparto
-         val algunaEnReparto = rutas.any { it.enReparto }
+        // Observar las rutas activas
+        viewModel.rutas.observe(this, Observer { rutas ->
+            // Comprobar si alguna ruta está en reparto
+            if (rutas.any { it.enReparto }) {
+                // Si alguna ruta está en reparto, iniciar la actividad de reparto
+                val intent = Intent(this, RepartoActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+            }
 
-         // Si alguna ruta está en reparto, iniciar la actividad de reparto
-         if (algunaEnReparto) {
-             // Crear el intent para ir a la actividad de reparto
-             val intent = Intent(this, RepartoActivity::class.java)
-             // Añadir flags para limpiar la pila de actividades y abrir una nueva
-             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-             startActivity(intent)
-         }
+            // Actualizar la lista de rutas en el RecyclerView
+            rutasAdapter.submitList(rutas)
 
-         // Actualizar la lista de rutas en el RecyclerView
-         rutasAdapter.submitList(rutas)
+            // Habilitar o deshabilitar el botón "Iniciar entregas" según las rutas
+            binding.btnIniciarEntregas.isEnabled = rutas.any { it.completado || it.cargado }
+        })
 
-         // Habilitar o deshabilitar el botón "Iniciar entregas" según las rutas
-         val habilitarBoton = rutas.any { it.completado || it.cargado }
-         binding.btnIniciarEntregas.isEnabled = habilitarBoton
-     })
- */
+        // Configurar el botón "Iniciar entregas"
+        binding.btnIniciarEntregas.setOnClickListener {
+            val intent = Intent(this, RepartoActivity::class.java)
+            startActivity(intent)
+        }
 
- // Cargar las rutas activas desde el ViewModel
- val transportistaUid = "senWZnLWE0gtQj6HAqgycbuNq4e2"  // Suponiendo que tienes el UID del transportista
- viewModel.obtenerRutasActivas(transportistaUid)
-}
+        // Cargar las rutas activas
+        val transportistaUid = "senWZnLWE0gtQj6HAqgycbuNq4e2"  // Suponiendo que tienes el UID del transportista
+        viewModel.obtenerRutasActivas(transportistaUid)
+    }
 }

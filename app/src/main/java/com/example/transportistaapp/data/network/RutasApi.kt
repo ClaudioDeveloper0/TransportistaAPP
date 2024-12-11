@@ -7,14 +7,16 @@ import retrofit2.http.Path
 import retrofit2.http.POST
 import retrofit2.http.Body
 
+
+
 interface RutasApi {
 
-    @GET("rutas/activas/{uid}")
+    @GET("Rutas/{uid}")
     suspend fun getRutasActivas(@Path("uid") uid: String): List<Ruta>
 
-    @GET("paquetes/ruta/{routeId}")
+    @GET("Paquetes/{routeId}")
     suspend fun getPaquetesByRoute(@Path("routeId") routeId: String): List<Paquete>
 
-    @POST("paquete/status")
-    suspend fun updatePaqueteStatus(@Body paqueteStatus: Paquete)
+    @POST("Paquetes_entregados/status")
+    suspend fun updatePaqueteStatus(@Body paqueteStatus: String)
 }
