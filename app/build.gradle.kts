@@ -75,19 +75,15 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
+    // códigos de barras / QR
+    implementation ("com.google.mlkit:barcode-scanning:17.0.2")
 
-    // Retrofit para hacer solicitudes HTTP
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
 
-    // Convertidor para Gson
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Coroutines para manejar llamadas asíncronas
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-
-    implementation ("com.google.android.gms:play-services-auth:21.3.0") // versión reciente
+    //or
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 
     // Room
     //noinspection KaptUsageInsteadOfKsp
