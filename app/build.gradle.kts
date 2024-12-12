@@ -70,20 +70,19 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
-    implementation("com.google.android.gms:play-services-location:21.0.1") // Example for location services
 
     // Retrofit para hacer solicitudes HTTP
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
 
-    // Convertidor para Gson (si estás utilizando Gson para convertir los datos de JSON a objetos Kotlin)
+    // Convertidor para Gson
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Coroutines para manejar llamadas asíncronas (si no lo has agregado aún)
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    // Coroutines para manejar llamadas asíncronas
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
-    implementation ("com.google.android.gms:play-services-auth:20.0.0") // versión reciente
+    implementation ("com.google.android.gms:play-services-auth:21.3.0") // versión reciente
 
     // Room
     //noinspection KaptUsageInsteadOfKsp
