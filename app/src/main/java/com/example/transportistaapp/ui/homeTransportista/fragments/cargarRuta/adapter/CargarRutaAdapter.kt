@@ -20,7 +20,6 @@ class CargarRutaAdapter (private var paquetes:List<Paquete> = emptyList()) :
         holder.render(paquete)
     }
 
-    // Cantidad de elementos en la lista
     override fun getItemCount(): Int = paquetes.size
 
     @SuppressLint("NotifyDataSetChanged")

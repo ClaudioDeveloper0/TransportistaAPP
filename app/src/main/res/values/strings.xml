@@ -20,4 +20,5 @@
     <string name="ver_ruta">Ver ruta</string>
     <string name="motivo_de_fallo">Motivo de fallo</string>
     <string name="ver_en_el_mapa">Ver en el mapa</string>
+    <string name="escanear_caja">Escanear Caja</string>
 </resources>

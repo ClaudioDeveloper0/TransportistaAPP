@@ -34,10 +34,9 @@ class RutaEspecificaFragment : Fragment(R.layout.fragment_ruta_especifica) {
         }
     }
 
-    // Método para escanear la imagen utilizando ML Kit
+    // Metodo para escanear la imagen utilizando ML Kit
     private fun scanImage(image: Bitmap) {
         val inputImage = InputImage.fromBitmap(image, 0)
-
         // Procesar la imagen con ML Kit
         scanner.process(inputImage)
             .addOnSuccessListener { barcodes ->
@@ -47,7 +46,6 @@ class RutaEspecificaFragment : Fragment(R.layout.fragment_ruta_especifica) {
                     Log.d("ScannedBarcode", "Barcode value: $value")
 
                     // actualizar el RecyclerView o hacer lo que necesites
-
 
                     // Para mostrar los datos escaneados
                 }

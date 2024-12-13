@@ -14,8 +14,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.transportistaapp.databinding.FragmentVerRutasBinding
 import com.example.transportistaapp.domain.model.Ruta
+import com.example.transportistaapp.ui.homeTransportista.RutasActivity
+import com.example.transportistaapp.ui.homeTransportista.fragments.cargarRuta.CargarRutaFragment
 import com.example.transportistaapp.ui.homeTransportista.fragments.verRutas.adapter.VerRutasAdapter
-import com.example.transportistaapp.ui.homeTransportista.fragments.cargarRuta.CargarRutaViewModel
 import com.example.transportistaapp.ui.pantallaReparto.RepartoActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -63,7 +64,19 @@ class VerRutasFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        verRutasAdapter = VerRutasAdapter()
+        verRutasAdapter = VerRutasAdapter { ruta ->
+            // Redirigir al nuevo fragmento con los parámetros
+            val detalleFragment = CargarRutaFragment().apply {
+                arguments = Bundle().apply {
+                    putString("rutaId", ruta.id) // Pasar el ID de la ruta como argumento
+                }
+            }
+            val fragmentContainerId = (requireActivity() as RutasActivity).binding.fragmentContainer.id
+            parentFragmentManager.beginTransaction()
+                .replace(fragmentContainerId, detalleFragment)
+                .addToBackStack(null) // Agregar a la pila para permitir volver atrás
+                .commit()
+        }
         binding.rvPaquetes.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = verRutasAdapter

@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.transportistaapp.R
 import com.example.transportistaapp.domain.model.Ruta
 
-class VerRutasAdapter(private var rutas:List<Ruta> = emptyList()) :
+class VerRutasAdapter(private var rutas:List<Ruta> = emptyList(), private val onRouteClick: (Ruta) -> Unit) :
     RecyclerView.Adapter<VerRutasViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VerRutasViewHolder {
         return VerRutasViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_ruta, parent, false), parent.context
+                .inflate(R.layout.item_ruta, parent, false), parent.context, onRouteClick
         )
     }
 
