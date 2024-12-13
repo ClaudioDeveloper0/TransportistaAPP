@@ -18,4 +18,6 @@
     <string name="logoContentDescription">Logo</string>
     <string name="terminar_entrega">Terminar entrega</string>
     <string name="ver_ruta">Ver ruta</string>
+    <string name="motivo_de_fallo">Motivo de fallo</string>
+    <string name="ver_en_el_mapa">Ver en el mapa</string>
 </resources>

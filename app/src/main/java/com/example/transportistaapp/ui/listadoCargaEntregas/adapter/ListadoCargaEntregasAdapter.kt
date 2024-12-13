@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.transportistaapp.R
 import com.example.transportistaapp.domain.model.Paquete
 
-class ListadoCajasEntregasAdapter(private var paquetes: List<Paquete> = emptyList()) :
+class ListadoCargaEntregasAdapter(private var paquetes: List<Paquete> = emptyList()) :
     RecyclerView.Adapter<ListadoCargaEntregasViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListadoCargaEntregasViewHolder {
@@ -28,5 +28,8 @@ class ListadoCajasEntregasAdapter(private var paquetes: List<Paquete> = emptyLis
     fun updateList(list: List<Paquete>) {
         paquetes = list
         notifyDataSetChanged()
+    }
+    fun getSelectedCajas() :List<Paquete> {
+        return emptyList()
     }
 }

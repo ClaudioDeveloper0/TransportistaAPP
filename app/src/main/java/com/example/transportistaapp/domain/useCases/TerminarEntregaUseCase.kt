@@ -9,9 +9,9 @@ class TerminarEntregaUseCase @Inject constructor(private val repository: Reposit
      * Verifica si hay paquetes<Paquete> que no se hayan entregado, y en ese caso los devuelve.
      * Si todos los paquetes fueron entregados, guarda los cambios en firebase y retorna null
      */
-    suspend operator fun invoke() : List<Paquete>? {
+    suspend operator fun invoke() : List<Paquete> {
         val paquetes = repository.obtenerPaquetesNoEntregados()
-        if (paquetes == null) {
+        if (paquetes.isEmpty()) {
             repository.terminarEntrega()
         }
         return paquetes

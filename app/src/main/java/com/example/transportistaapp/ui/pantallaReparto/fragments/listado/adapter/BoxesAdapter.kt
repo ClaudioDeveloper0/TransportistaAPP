@@ -26,8 +26,8 @@ class BoxesAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(box: Paquete) {
-            binding.tvBoxName.text = box.id
-            binding.tvBoxStatus.text = if (box.estado == "cargado") "Cargado" else "Pendiente"
+            binding.tvPaqueteID.text = box.id
+            binding.tvPaqueteEstado.text = if (box.estado == "cargado") "Cargado" else "Pendiente"
             binding.btnValidate.setOnClickListener { onValidateClicked(box) }
         }
     }

@@ -1,20 +1,26 @@
 package com.example.transportistaapp.ui.listadoCargaEntregas
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.transportistaapp.domain.model.Paquete
+import com.example.transportistaapp.domain.useCases.CajaEntregadaUseCase
+import com.example.transportistaapp.domain.useCases.GetPaquetesEnRepartoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ListadoCargaEntregasViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val GetPaquetesEnRepartoUseCase: GetPaquetesEnRepartoUseCase,
+    private val cajaEntregadaUseCase: CajaEntregadaUseCase
 ) : ViewModel() {
 
-    private val _cajasLiveData = MutableLiveData<List<Caja>>()
-    val cajasLiveData: LiveData<List<Caja>> get() = _cajasLiveData
+    private var _paquetesState =
+        MutableStateFlow<ListadoCargaEntregasState>(ListadoCargaEntregasState.Loading)
+    val paquetesState: StateFlow<ListadoCargaEntregasState> = _paquetesState
 
     init {
         obtenerCajas()
@@ -22,21 +28,24 @@ class ListadoCargaEntregasViewModel @Inject constructor(
 
     private fun obtenerCajas() {
         viewModelScope.launch {
+            _paquetesState.value = ListadoCargaEntregasState.Loading
             try {
-                val cajas = firebaseRepository.obtenerCajas()
-                _cajasLiveData.value = cajas
+                val paquetes = GetPaquetesEnRepartoUseCase()
+                _paquetesState.value = ListadoCargaEntregasState.Success(paquetes)
             } catch (e: Exception) {
-                // Manejar error
+                ListadoCargaEntregasState.Error("Error: $e")
             }
         }
     }
 
-    fun registrarEntregas(cajas: List<Caja>) {
+    fun registrarEntregas(paquetes: List<Paquete>) {
         viewModelScope.launch {
             try {
-                firebaseRepository.registrarEntregas(cajas)
+                paquetes.forEach {
+                    cajaEntregadaUseCase(it.id)
+                }
             } catch (e: Exception) {
-                // Manejar error
+                Log.d("MaybeaLog listadoCargaEntregas 50", "Error: $e")
             }
         }
     }

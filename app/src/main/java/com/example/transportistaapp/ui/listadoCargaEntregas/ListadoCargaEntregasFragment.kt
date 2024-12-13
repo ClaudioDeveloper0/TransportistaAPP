@@ -1,16 +1,21 @@
 package com.example.transportistaapp.ui.listadoCargaEntregas
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.transportistaapp.databinding.FragmentListadoBinding
-import com.example.transportistaapp.ui.listadoCargaEntregas.adapter.ListadoCajasEntregasAdapter
-import com.example.transportistaapp.ui.homeTransportista.fragments.verRutas.adapter.VerRutasAdapter
+import com.example.transportistaapp.domain.model.Paquete
+import com.example.transportistaapp.ui.listadoCargaEntregas.adapter.ListadoCargaEntregasAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ListadoCargaEntregasFragment : Fragment() {
@@ -18,7 +23,7 @@ class ListadoCargaEntregasFragment : Fragment() {
     private var _binding: FragmentListadoBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ListadoCargaEntregasViewModel by viewModels()
-    private lateinit var adapter: ListadoCajasEntregasAdapter
+    private lateinit var adapter: ListadoCargaEntregasAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,31 +41,47 @@ class ListadoCargaEntregasFragment : Fragment() {
 
     private fun initUI() {
         initAdapter()
+        initStates()
+        initListeners()
     }
 
-    private fun initAdapter() {
-        private fun initAdapter() {
-            verRutasAdapter = VerRutasAdapter()
-            binding.rvPaquetes.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                adapter = verRutasAdapter
+    private fun initStates() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.paquetesState.collect {
+                        when (it) {
+                            is ListadoCargaEntregasState.Error -> errorState(it.error)
+                            ListadoCargaEntregasState.Loading -> loadingState()
+                            is ListadoCargaEntregasState.Success -> successState(it.paquetes)
+                        }
+                    }
+                }
             }
         }
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        // Observar el estado de las cajas
-        viewModel.cajasLiveData.observe(viewLifecycleOwner) { cajas ->
-            adapter.submitList(cajas)
-        }
-
+    private fun loadingState() {
+        //TODO("Hay que poner un spinner o algo de cargando en la pantalla")
+    }
+    private fun successState(paquetes : List<Paquete>) {
+        adapter.updateList(paquetes)
+    }
+    private fun errorState(error:String) {
+        Log.d("MaybeaLog", error)
+    }
+    private fun initListeners() {
         binding.btnEscanearCaja.setOnClickListener {
-            // Lógica para registrar entrega
             val cajasAEntregar = adapter.getSelectedCajas()
             viewModel.registrarEntregas(cajasAEntregar)
         }
     }
+
+    private fun initAdapter() {
+        adapter = ListadoCargaEntregasAdapter()
+        binding.recyclerViewCajas.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = adapter
+        }
+    }
+
 }

@@ -28,6 +28,7 @@ data class PaqueteEntity(
     @ColumnInfo(name = "estado") val estado: Int,
     @ColumnInfo(name = "ruta") val ruta: String,
     @ColumnInfo(name = "fechaEntrega") val fecha: Date = Date(),
+    @ColumnInfo(name = "detalles") val detalles: String = "",
 )
 
 fun PaqueteEntity.toDomain(): Paquete {
@@ -45,7 +46,8 @@ fun PaqueteEntity.toDomain(): Paquete {
             4 -> "Falla en entrega, devuelto a empresa transportista"
             5 -> "Falla en entrega, devuelto al vendedor"
             else -> "Estado desconocido? no deberías estar viendo esto..."
-        }
+        },
+        detalles = detalles,
     )
 }
 
@@ -65,6 +67,7 @@ fun Paquete.toRoom(): PaqueteEntity {
             else -> 999999999
         },
         ruta = ruta,
-        fecha = fecha
+        fecha = fecha,
+        detalles = detalles
     )
 }

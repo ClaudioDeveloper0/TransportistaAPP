@@ -1,89 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardView"
+    xmlns:Tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     app:cardCornerRadius="20dp"
-    app:CardElevation="4dp"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="6dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/btnMapa"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/ver_en_el_mapa"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/share_location" />
+
+        <LinearLayout
+            android:id="@+id/linearLayaout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="6dp">
-            <ImageView
-                android:id="@+id/icoimage"
-                android:layout_width="70dp"
-                android:layout_height="78dp"
-                android:layaout_alingParentStart="true"
-                android:layaout_centerVertical="true"
-                android:layaout_gravity="center"
-                android:paddingLeft="14dp"
-                android:paddingRight="24dp"
-                app:srcCompat="@drawable/share_location"
-                android:layout_alignParentRight="true">
-            </ImageView>
-            <LinearLayout
+            android:animateLayoutChanges="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnMapa"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tvDireccion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                android:orientation="vertical">
+                android:layout_marginBottom="2dp"
+                Tools:text="####"
+                android:textColor="@color/text_color_gris"
+                android:textSize="18sp" />
 
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/linearLayaout"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvCodigoPaquete"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                android:layaout_alingParentTop="true"
-                android:layaout_marginStart="4dp"
-                android:layaout_marginTop="2dp"
-                android:layaout_toEndOf="@id/icoimage"
-                android:orientation="vertical"
-                android:layaout_marginLeft="4dp"
-                android:layaout_toRightOf="@id/icoimage">
-                <TextView
-                    android:id="@+id/tvDireccion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layaout_marginBottom="2dp"
-                    android:text="####"
-                    android:textColor="@color/text_color_gris"
-                    android:textSize="18sp"/>
-                <TextView
-                    android:id="@+id/tvCodigoPaquete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="####"
-                    android:textSize="13sp"/>
+                Tools:text="####"
+                android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/tvEstado"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Estado"
-                    android:layaout_centerVertical="true"
-                    android:layaout_marginEnd="6dp"
-                    android:layaout_marginRight="6dp"
-                    android:textStyle="bold"
-                    android:textSize="12sp"
-                    android:textColor="@color/green_button"
-                    android:layaout_alingParentRight="true"
-                    android:layaout_alingParentEnd="true"/>
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvEstado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                Tools:text="Estado"
+                android:textColor="@color/green_button"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-        </RelativeLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

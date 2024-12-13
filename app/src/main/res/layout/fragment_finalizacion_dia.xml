@@ -4,29 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-
+<!--TODO hay que hacer este fragment que no estaba-->
     <TextView
-        android:id="@+id/tvFormularioEntregaFallosTitle"
+        android:id="@+id/tvListadoCargaTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Formulario de Entrega"
+        android:text="Listado de Cargas"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="20dp"/>
 
-    <EditText
-        android:id="@+id/etMotivoFallo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Motivo de fallo"
-        android:layout_marginBottom="20dp"/>
-
     <Button
-        android:id="@+id/btnRegistrarFallo"
+        android:id="@+id/btnFinalizarDia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrar Fallo"
+        android:text="Fin dia"
         android:layout_marginTop="16dp"
         android:background="@drawable/custom_button"
         android:textColor="@android:color/white"/>
+
 </LinearLayout>
+
