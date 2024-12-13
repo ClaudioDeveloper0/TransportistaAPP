@@ -58,6 +58,7 @@ class VerRutasFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnIniciarEntregas.setOnClickListener {
+            viewModel.comenzarEntregas()
             val intent = Intent(requireContext(), RepartoActivity::class.java)
             startActivity(intent)
         }
