@@ -55,7 +55,7 @@ class ListadoFragment : Fragment() {
 //                .addToBackStack(null)
 //                .commit()
         }
-        binding.rvPaquetes.apply {
+        binding.recyclerViewCajas.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = listadoAdapter
         }

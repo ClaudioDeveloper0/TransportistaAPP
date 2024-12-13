@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-        <!-- Aquí se declaran las variables que usarás en el binding -->
-        <variable
-            name="Cajas"
-            type="com.example.transportistaapp.ui.cargaentregas.CajaAdapter" />
-    </data>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:padding="16dp"
     android:background="?android:attr/selectableItemBackground">
@@ -21,19 +13,19 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvBoxName"
+            android:id="@+id/tvPaqueteID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@{Cajas.id}"
+            tools:text="2345678"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tvBoxStatus"
+            android:id="@+id/tvPaqueteEstado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@{Cajas.estado}"
+            tools:text="En Reparto"
             android:textSize="16sp" />
     </LinearLayout>
 
