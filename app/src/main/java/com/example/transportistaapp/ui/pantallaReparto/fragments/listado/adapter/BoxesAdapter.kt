@@ -3,7 +3,7 @@ package com.example.transportistaapp.ui.pantallaReparto.fragments.listado.adapte
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.transportistaapp.databinding.ItemBoxBinding
+import com.example.transportistaapp.databinding.ItemPaqueteBinding
 import com.example.transportistaapp.domain.model.Paquete
 
 class BoxesAdapter(
@@ -12,7 +12,7 @@ class BoxesAdapter(
 ) : RecyclerView.Adapter<BoxesAdapter.BoxViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoxViewHolder {
-        val binding = ItemBoxBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemPaqueteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return BoxViewHolder(binding)
     }
 
@@ -22,13 +22,13 @@ class BoxesAdapter(
 
     override fun getItemCount(): Int = boxes.size
 
-    inner class BoxViewHolder(private val binding: ItemBoxBinding) :
+    inner class BoxViewHolder(private val binding: ItemPaqueteBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(box: Paquete) {
-            binding.tvPaqueteID.text = box.id
-            binding.tvPaqueteEstado.text = if (box.estado == "cargado") "Cargado" else "Pendiente"
-            binding.btnValidate.setOnClickListener { onValidateClicked(box) }
+            binding.tvCodigoPaquete.text = box.id
+            binding.tvEstado.text = if (box.estado == "cargado") "Cargado" else "Pendiente"
+            binding.tvDireccion.text = box.direccion
         }
     }
 }

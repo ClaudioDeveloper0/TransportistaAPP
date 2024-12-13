@@ -8,7 +8,7 @@ import java.util.Date
 interface Repository {
     suspend fun loginTransportista(user: String, password: String): FirebaseUser?
     suspend fun updateLocalPackages(transportista: String)
-    suspend fun getRutasActivas(uid: String): List<Ruta>
+    suspend fun getRutasActivas(): List<Ruta>
     suspend fun marcarCajaEntregada(cajaId: String, fechaEntrega: Date)
     suspend fun marcarCajaNoEntregada(cajaId: String, motivo: String)
     suspend fun obtenerPaquetesNoEntregados(): List<Paquete>
@@ -16,4 +16,5 @@ interface Repository {
     suspend fun terminarEntrega()
     suspend fun getPaquetesByRoute(routeId: String): List<Paquete>
     suspend fun updatePaqueteStatus(paqueteId: String, nuevoEstado: String)
+    suspend fun cargarRuta(rutaID:String)
 }

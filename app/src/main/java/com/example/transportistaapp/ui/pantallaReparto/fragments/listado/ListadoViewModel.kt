@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.transportistaapp.domain.model.Paquete
 import com.example.transportistaapp.domain.useCases.GetRutasActivasUseCase
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ListadoViewModel@Inject constructor(
     private var getRutasActivasUseCase: GetRutasActivasUseCase,
-    private var auth: FirebaseAuth
 ) : ViewModel() {
 
     private val _paquetes = MutableLiveData<List<Paquete>>()
@@ -31,7 +29,7 @@ class ListadoViewModel@Inject constructor(
     fun cargarRutas() {
         viewModelScope.launch {
             _state.value = ListadoState.Loading
-            val rutas = withContext(Dispatchers.IO) { getRutasActivasUseCase(auth.currentUser!!.uid) }
+            val rutas = withContext(Dispatchers.IO) { getRutasActivasUseCase() }
             val paquetes = mutableListOf<Paquete>()
             rutas.forEach {
                 paquetes.addAll(it.paquetes)

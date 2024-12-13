@@ -1,6 +1,5 @@
 package com.example.transportistaapp.data
 
-import android.util.Log
 import com.example.transportistaapp.data.database.dao.PaqueteDao
 import com.example.transportistaapp.data.database.dao.RutaDao
 import com.example.transportistaapp.data.database.entities.PaqueteEntity
@@ -44,27 +43,25 @@ class RepositoryImpl @Inject constructor(
         paqueteDao.deleteAll()
         rutaDao.deleteAll()
         val rutasList = firestoreService.getRutasPorTransportista(transportista)
-        Log.d("Maybealog LoginTransportistaUseCase", "Se obtiene")
-        Log.d("Maybealog LoginTransportistaUseCase", rutasList.toString())
-        rutaDao.insertAll(rutasList.map {
-            Log.d("Maybealog LoginTransportistaUseCase", it.toRoom().toString())
-            it.toRoom()
-        })
-        Log.d("Maybealog LoginTransportistaUseCase", "Se insertan las rutas")
+        rutaDao.insertAll(rutasList.map { it.toRoom() })
         rutasList.forEach { ruta ->
             val paquetesEntityList = ruta.paquetes.map { it.toRoom() }
             paqueteDao.insertAll(paquetesEntityList)
         }
-        Log.d("Maybealog LoginTransportistaUseCase", "Se insertan los paquetes")
     }
 
     override suspend fun obtenerPaquetesEnReparto(): List<Paquete> {
         return paqueteDao.obtenerEnReparto().map { it.toDomain() }
     }
 
-    override suspend fun getRutasActivas(uid: String): List<Ruta> {
-        val rutasFirebase = firestoreService.obtenerRutasPorTrabajador(uid)
-        return rutasFirebase
+    override suspend fun getRutasActivas(): List<Ruta> {
+        val rutasLocal = rutaDao.getAll().map { it.toDomain() }
+        val rutas = rutasLocal.map { ruta ->
+            val paquetes = paqueteDao.obtenerPorRuta(ruta.id)
+            ruta.paquetes = paquetes.map { it.toDomain() }
+            ruta
+        }
+        return rutas
     }
 
     override suspend fun marcarCajaEntregada(cajaId: String, fechaEntrega: Date) {
@@ -94,11 +91,17 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPaquetesByRoute(routeId: String): List<Paquete> {
-        return firestoreService.obtenerPaquetesPorRuta(routeId)
+        val paquetes = paqueteDao.obtenerPorRuta(routeId)
+        return paquetes.map { it.toDomain() }
     }
 
     override suspend fun updatePaqueteStatus(paqueteId: String, nuevoEstado: String) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun cargarRuta(rutaID: String) {
+        rutaDao.cargarRuta(rutaID)
+        firestoreService.cargarRuta(rutaID)
     }
 
 }

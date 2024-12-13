@@ -29,7 +29,7 @@ class RutaEspecificaFragment : Fragment(R.layout.fragment_ruta_especifica) {
         scanButton.isEnabled = true // Asegúrate de habilitarlo cuando sea necesario
 
         scanButton.setOnClickListener {
-            val bitmap = captureImage() // Este método debes implementarlo según cómo capturas la imagen
+            val bitmap = captureImage() // Este metodo debes implementarlo según cómo capturas la imagen
             scanImage(bitmap)
         }
     }

@@ -5,7 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp")
-    id ("dagger.hilt.android.plugin")
+    id("dagger.hilt.android.plugin")
 
 }
 
@@ -33,9 +33,9 @@ android {
         }
 
 
-    buildFeatures {
-        buildConfig = true
-    }
+        buildFeatures {
+            buildConfig = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -45,13 +45,12 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 }
 
 dependencies {
-
 
 
     implementation(libs.androidx.core.ktx)
@@ -64,27 +63,33 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // ViewModel y LiveData
-    implementation (libs.androidx.lifecycle.viewmodel.ktx)
-    implementation (libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     // Firebase (para Firestore y Authentication)
     implementation(platform(libs.firebase.bom))
-    implementation (libs.firebase.auth.ktx)
+    implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.analytics)
-    implementation (libs.firebase.firestore.ktx)
+    implementation(libs.firebase.firestore.ktx)
 
     //Dagger hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.legacy.support.v4)
     kapt(libs.hilt.android.compiler)
 
+
+    // CameraX dependencies
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.camera2)  // Esto es importante
+
+
     // códigos de barras / QR
-    implementation ("com.google.mlkit:barcode-scanning:17.0.2")
+    implementation(libs.barcode.scanning)
 
     // Coroutines para manejar llamadas asíncronas
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    //or
-    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation(libs.kotlinx.coroutines.android)
 
     // Room
     ksp(libs.androidx.room.compiler)

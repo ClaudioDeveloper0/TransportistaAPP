@@ -11,13 +11,17 @@ import com.example.transportistaapp.data.database.entities.RutaEntity
 interface RutaDao {
 
     @Query("Select * FROM rutas_table")
-    suspend fun getAll():List<RutaEntity>
+    suspend fun getAll(): List<RutaEntity>
 
     @Query("Select * FROM rutas_table WHERE en_reparto=1")
-    suspend fun rutasEnReparto():List<RutaEntity>
+    suspend fun rutasEnReparto(): List<RutaEntity>
+
+
+    @Query("UPDATE rutas_table SET cargado=1 WHERE id=:ruta")
+    suspend fun cargarRuta(ruta: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(paquetes:List<RutaEntity>)
+    suspend fun insertAll(paquetes: List<RutaEntity>)
 
     @Query("DELETE FROM rutas_table")
     suspend fun deleteAll()

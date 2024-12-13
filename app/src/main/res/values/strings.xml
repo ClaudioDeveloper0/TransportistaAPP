@@ -21,4 +21,5 @@
     <string name="motivo_de_fallo">Motivo de fallo</string>
     <string name="ver_en_el_mapa">Ver en el mapa</string>
     <string name="escanear_caja">Escanear Caja</string>
+    <string name="codigo_del_paquete">Codigo del paquete:</string>
 </resources>

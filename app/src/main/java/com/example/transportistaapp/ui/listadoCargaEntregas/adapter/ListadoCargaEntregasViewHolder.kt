@@ -14,6 +14,5 @@ class ListadoCargaEntregasViewHolder(view: View, private val context: Context) :
 
     fun render(paquete: Paquete) {
         binding.tvPaqueteID.text = paquete.id // Enlazar el objeto Caja con el layout
-        binding.tvPaqueteEstado.text = paquete.estado // Enlazar el objeto Caja con el layout
     }
 }
