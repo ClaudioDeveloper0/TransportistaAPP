@@ -6,28 +6,27 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvListadoCargaTitle"
+        android:id="@+id/tvFormularioEntregaFallosTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Listado de Cargas"
+        android:text="Formulario de Entrega"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="20dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCajas"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <Button
-        android:id="@+id/btnEscanearCaja"
+    <EditText
+        android:id="@+id/etMotivoFallo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Escanear Caja"
+        android:hint="Motivo de fallo"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/btnRegistrarFallo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrar Fallo"
         android:layout_marginTop="16dp"
         android:background="@drawable/custom_button"
         android:textColor="@android:color/white"/>
-
 </LinearLayout>
-

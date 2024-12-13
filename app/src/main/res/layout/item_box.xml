@@ -1,31 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- Aquí se declaran las variables que usarás en el binding -->
+        <variable
+            name="Cajas"
+            type="com.example.transportistaapp.ui.cargaentregas.CajaAdapter" />
+    </data>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="?android:attr/selectableItemBackground">
 
-    <!-- Nombre de la caja -->
-    <TextView
-        android:id="@+id/tvBoxName"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="294dp"
         android:layout_height="wrap_content"
-        android:text="Nombre de la Caja"
-        android:textSize="16sp" />
+        android:orientation="vertical">
 
-    <!-- Estado de la caja -->
-    <TextView
-        android:id="@+id/tvBoxStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Estado de la Caja"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tvBoxName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@{Cajas.id}"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvBoxStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@{Cajas.estado}"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <!-- Botón para validar -->
     <Button
         android:id="@+id/btnValidate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Validar" />
+        android:text="Validar"
+        android:background="@drawable/custom_button"
+        android:textColor="@android:color/white"/>
 </LinearLayout>
