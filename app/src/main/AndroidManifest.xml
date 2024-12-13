@@ -32,7 +32,7 @@
         <activity
             android:name=".ui.pantallaReparto.RepartoActivity"
             android:exported="true" />
-        <activity android:name=".ui.homeTransportista.DashboardActivity" />
+        <activity android:name=".ui.homeTransportista.RutasActivity" />
         <activity
             android:name=".ui.login.MainActivity"
             android:exported="true">

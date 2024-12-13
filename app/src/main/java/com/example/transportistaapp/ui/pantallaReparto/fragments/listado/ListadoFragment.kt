@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ListadoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var _binding: FragmentListadoBinding? = null
     private val binding get() = _binding!!
     private val listadoViewModel: ListadoViewModel by viewModels()

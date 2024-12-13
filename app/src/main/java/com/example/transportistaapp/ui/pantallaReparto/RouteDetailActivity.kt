@@ -28,7 +28,6 @@ class RouteDetailActivity : AppCompatActivity() {
                 viewModel.validateBox(box.id)
             }
         }
-
         binding.btnScanBox.setOnClickListener {
             // Implementar función para escanear código QR y validar la caja.
         }

@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
-    id("kotlin-kapt")
+    id("org.jetbrains.kotlin.kapt")
+    id("com.google.devtools.ksp")
     id ("dagger.hilt.android.plugin")
 
 }
@@ -40,6 +41,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -73,12 +75,11 @@ dependencies {
 
     //Dagger hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.legacy.support.v4)
     kapt(libs.hilt.android.compiler)
 
     // códigos de barras / QR
     implementation ("com.google.mlkit:barcode-scanning:17.0.2")
-
-
 
     // Coroutines para manejar llamadas asíncronas
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
@@ -86,12 +87,8 @@ dependencies {
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 
     // Room
-    //noinspection KaptUsageInsteadOfKsp
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-
-    //mapBox
-
 
 
     //fragments
@@ -109,9 +106,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
-
-
-
 kapt {
     correctErrorTypes = true
+}
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }

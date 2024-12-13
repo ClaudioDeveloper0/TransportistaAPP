@@ -31,7 +31,6 @@ class ListadoViewModel@Inject constructor(
     fun cargarRutas() {
         viewModelScope.launch {
             _state.value = ListadoState.Loading
-
             val rutas = withContext(Dispatchers.IO) { getRutasActivasUseCase(auth.currentUser!!.uid) }
             val paquetes = mutableListOf<Paquete>()
             rutas.forEach {

@@ -15,7 +15,7 @@ interface PaqueteDao {
     suspend fun getAll():List<PaqueteEntity>
 
     @Query("Select * FROM paquetes_table WHERE ruta=:ruta")
-    suspend fun obtenerPorRuta(ruta:Int):List<PaqueteEntity>
+    suspend fun obtenerPorRuta(ruta:String):List<PaqueteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(paquetes:List<PaqueteEntity>)

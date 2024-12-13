@@ -8,6 +8,8 @@ import java.util.Date
 interface Repository {
     suspend fun loginTransportista(user:String, password:String) : FirebaseUser?
 
+    suspend fun updateLocalPackages(transportista:String)
+
     suspend fun getRutasActivas(uid: String): List<Ruta>
 
     suspend fun marcarCajaEntregada(cajaId : String, fechaEntrega : Date)

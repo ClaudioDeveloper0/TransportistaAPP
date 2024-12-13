@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.WriteBatch
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 import javax.inject.Inject
 
 class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
@@ -21,7 +22,6 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
             .whereEqualTo("activa", true)
             .get()
             .await()
-
         val rutas = rutasSnapshot.documents.map { d ->
             Ruta(
                 id = d.id,
@@ -31,12 +31,9 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
                 enReparto = d.getBoolean("en_reparto") ?: false
             )
         }
-
         val rutasIds = rutas.map { it.id }
-
         val rutasChunks = rutasIds.chunked(10) // Divide la lista en partes de máximo 10 elementos
         val paquetes = mutableListOf<Paquete>()
-
         for (chunk in rutasChunks) {
             val paquetesSnapshot = db.collection("Paquetes")
                 .whereIn("ruta", chunk)
@@ -61,15 +58,59 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
                 )
             })
         }
-
         val paquetesPorRuta = paquetes.groupBy { it.ruta }
-
         rutas.forEach { ruta ->
             ruta.paquetes = paquetesPorRuta[ruta.id] ?: emptyList()
         }
-
         return rutas
-
+    }
+    suspend fun getRutasPorTransportista(uid : String) :List<Ruta>{
+        val rutasSnapshot = db.collection("Rutas")
+            .whereEqualTo("transportista", uid)
+            .whereEqualTo("activa", true)
+            .get()
+            .await()
+        val rutas = rutasSnapshot.documents.map { d ->
+            Ruta(
+                id = d.id,
+                nombre = d.getString("alias") ?: "",
+                cargado = d.getBoolean("cargado") ?: false,
+                completado = d.getBoolean("validado") ?: false,
+                enReparto = d.getBoolean("en_reparto") ?: false
+            )
+        }
+        val rutasIds = rutas.map { it.id }
+        val rutasChunks = rutasIds.chunked(10) // Divide la lista en partes de máximo 10 elementos
+        val paquetes = mutableListOf<Paquete>()
+        for (chunk in rutasChunks) {
+            val paquetesSnapshot = db.collection("Paquetes")
+                .whereIn("ruta", chunk)
+                .get()
+                .await()
+            paquetes.addAll(paquetesSnapshot.documents.map { p ->
+                Paquete(
+                    id = p.id,
+                    contacto = p.getString("contacto") ?: "",
+                    direccion = p.getString("direccion") ?: "",
+                    receptor = p.getString("receptor") ?: "",
+                    ruta = p.getString("ruta") ?: "",
+                    estado = when (p.getLong("estado") ?: 0L) {
+                        0L -> "Salió del centro de distribución"
+                        1L -> "Recepcionado por empresa transportista"
+                        2L -> "En reparto"
+                        3L -> "Entregado"
+                        4L -> "Falla en entrega, devuelto a empresa transportista"
+                        5L -> "Falla en entrega, devuelto al vendedor"
+                        else -> "Estado desconocido"
+                    }
+                )
+            })
+        }
+        val paquetesPorRuta = paquetes.groupBy { it.ruta }
+        rutas.forEach { ruta ->
+            ruta.paquetes = paquetesPorRuta[ruta.id] ?: emptyList()
+        }
+        return rutas
     }
 
     suspend fun esTransportista(user: FirebaseUser): Boolean {
@@ -117,6 +158,25 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
             }
             batch.commit().await()
         }
+    }
+    suspend fun obtenerPaquetesPorRuta(rutaID:String) : List<Paquete> {
+        val paqueteSnapshot = db.collection("Paquetes")
+            .whereEqualTo("ruta", rutaID)
+            .get()
+            .await()
+        val paquetes = paqueteSnapshot.map { p ->
+            Paquete(
+                id = p.id,
+                direccion = p.getString("direccion") ?: "",
+                ruta = p.getString("ruta") ?: "",
+                contacto = p.getString("contacto") ?: "",
+                receptor = p.getString("receptor") ?: "",
+                estado = p.getLong("estado").toString(),
+                fecha = Date(),     //TODO: implementar la fecha
+                detalles = "", // TODO : Obtener detalles
+            )
+        }
+        return paquetes
     }
 
 }

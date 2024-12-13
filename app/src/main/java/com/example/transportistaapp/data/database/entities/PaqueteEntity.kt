@@ -3,18 +3,21 @@ package com.example.transportistaapp.data.database.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.transportistaapp.domain.model.Paquete
 import java.util.Date
 
 
 @Entity(
-    tableName = "paquetes_table", foreignKeys = [ForeignKey(
+    tableName = "paquetes_table",
+    foreignKeys = [ForeignKey(
         entity = RutaEntity::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("ruta"),
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["ruta"])] // Agrega un índice para la columna 'ruta'
 )
 data class PaqueteEntity(
     @PrimaryKey(autoGenerate = false)
@@ -23,7 +26,7 @@ data class PaqueteEntity(
     @ColumnInfo(name = "fono") val fono: String,
     @ColumnInfo(name = "direccion") val direccion: String,
     @ColumnInfo(name = "estado") val estado: Int,
-    @ColumnInfo(name = "ruta") val ruta: Int,
+    @ColumnInfo(name = "ruta") val ruta: String,
     @ColumnInfo(name = "fechaEntrega") val fecha: Date = Date(),
 )
 
@@ -33,7 +36,7 @@ fun PaqueteEntity.toDomain(): Paquete {
         contacto = fono,
         direccion = direccion,
         receptor = receptor,
-        ruta = ruta.toString().padStart(10, '0'),
+        ruta = ruta,
         estado = when (estado) {
             0 -> "Salió del centro de distribución"
             1 -> "Recepcionado por empresa transportista "
@@ -61,7 +64,7 @@ fun Paquete.toRoom(): PaqueteEntity {
             "Falla en entrega, devuelto al vendedor" -> 5
             else -> 999999999
         },
-        ruta = ruta.toInt(),
+        ruta = ruta,
         fecha = fecha
     )
 }

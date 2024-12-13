@@ -19,15 +19,16 @@ object RoomModule {
 
     @Singleton
     @Provides
-    fun proveerRoom(@ApplicationContext context : Context) =
-        Room.databaseBuilder(context, LocalDatabase::class.java, DATABASE_NAME).build()
+    fun proveerRoom(@ApplicationContext context: Context) =
+        Room.databaseBuilder(context, LocalDatabase::class.java, DATABASE_NAME)
+            .fallbackToDestructiveMigration().build()
 
     @Singleton
     @Provides
-    fun proveerPaqueteDao(db:LocalDatabase) = db.getPaqueteDao()
+    fun proveerPaqueteDao(db: LocalDatabase) = db.getPaqueteDao()
 
     @Singleton
     @Provides
-    fun proveerRutaDao(db:LocalDatabase) = db.getRutaDao()
+    fun proveerRutaDao(db: LocalDatabase) = db.getRutaDao()
 
 }

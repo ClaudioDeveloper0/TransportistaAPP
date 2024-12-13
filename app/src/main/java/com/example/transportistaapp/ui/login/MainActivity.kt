@@ -10,7 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.transportistaapp.R
 import com.example.transportistaapp.databinding.ActivityMainBinding
-import com.example.transportistaapp.ui.homeTransportista.DashboardActivity
+import com.example.transportistaapp.ui.homeTransportista.RutasActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,7 +30,14 @@ class MainActivity : AppCompatActivity() {
             val password = binding.etPassword.text.toString()
             loginViewModel.login(email, password)
         }
+        initUI()
+    }
 
+    private fun initUI() {
+        initState()
+    }
+
+    private fun initState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 loginViewModel.loginState.collect { state ->
@@ -55,9 +62,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun navigateToDashboard() {
-        val intent = Intent(this, DashboardActivity::class.java)
+        val intent = Intent(this, RutasActivity::class.java)
         startActivity(intent)
         finish()
 

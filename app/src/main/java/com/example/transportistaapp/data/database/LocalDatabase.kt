@@ -12,8 +12,9 @@ import com.example.transportistaapp.data.database.entities.*
         PaqueteEntity::class,
         RutaEntity::class,
     ],
-    version = 1,
-    exportSchema = false
+    version = 2,
+    exportSchema = true,
+
 )
 @TypeConverters(Converter::class)
 abstract class LocalDatabase : RoomDatabase() {
