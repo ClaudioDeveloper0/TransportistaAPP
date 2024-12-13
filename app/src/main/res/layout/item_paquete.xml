@@ -1,56 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/parent"
+    android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
-    android:background="@android:color/white"
-    android:padding="6dp">
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    app:cardCornerRadius="20dp"
+    app:CardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/tvCodigoPaquete"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tvDireccion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="223478765" />
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvDireccion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tvEstado"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCodigoPaquete"
-        tools:text="Calle los naranjos 1567, Mirasol" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="6dp">
+            <ImageView
+                android:id="@+id/icoimage"
+                android:layout_width="70dp"
+                android:layout_height="78dp"
+                android:layaout_alingParentStart="true"
+                android:layaout_centerVertical="true"
+                android:layaout_gravity="center"
+                android:paddingLeft="14dp"
+                android:paddingRight="24dp"
+                app:srcCompat="@drawable/share_location"
+                android:layout_alignParentRight="true">
+            </ImageView>
+            <LinearLayout
 
-    <TextView
-        android:id="@+id/tvEstado"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDireccion"
-        tools:text="Pendiente de entrega" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/btnMapa"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:contentDescription="@string/ver_ruta"
-        android:background="@drawable/marker"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayaout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:layaout_alingParentTop="true"
+                android:layaout_marginStart="4dp"
+                android:layaout_marginTop="2dp"
+                android:layaout_toEndOf="@id/icoimage"
+                android:orientation="vertical"
+                android:layaout_marginLeft="4dp"
+                android:layaout_toRightOf="@id/icoimage">
+                <TextView
+                    android:id="@+id/tvDireccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layaout_marginBottom="2dp"
+                    android:text="####"
+                    android:textColor="@color/text_color_gris"
+                    android:textSize="18sp"/>
+                <TextView
+                    android:id="@+id/tvCodigoPaquete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="####"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/tvEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Estado"
+                    android:layaout_centerVertical="true"
+                    android:layaout_marginEnd="6dp"
+                    android:layaout_marginRight="6dp"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@color/green_button"
+                    android:layaout_alingParentRight="true"
+                    android:layaout_alingParentEnd="true"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

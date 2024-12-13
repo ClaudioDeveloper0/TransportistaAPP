@@ -13,5 +13,8 @@
     <color name="orange_button_end">#b56908</color>
     <color name="black_custom_start">#c78d46</color>
     <color name="black_custom_end">#c78d46</color>
+    <color name="text_color_gris">#434343</color>
+    <color name="green_button">#2FE639</color>
+
 
 </resources>
