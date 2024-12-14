@@ -26,7 +26,10 @@
         android:id="@+id/btn_scan_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Escanear Caja"
-        android:layout_marginTop="16dp" />
+        android:text="@string/escanear_caja"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/custom_button"
+        android:textColor="@color/white"
+        />
 
 </LinearLayout>

@@ -22,4 +22,9 @@
     <string name="ver_en_el_mapa">Ver en el mapa</string>
     <string name="escanear_caja">Escanear Caja</string>
     <string name="codigo_del_paquete">Codigo del paquete:</string>
+    <string name="finalizacion_del_dia">Finalización del Día</string>
+    <string name="finalizar_dia">Finalizar Día</string>
+    <string name="listado_de_cargas">Listado de Cargas</string>
+    <string name="fin_dia">Fin dia</string>
+    <string name="ruta_especifica">Ruta Específica</string>
 </resources>
