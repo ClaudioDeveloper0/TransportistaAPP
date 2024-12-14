@@ -13,14 +13,11 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.example.transportistaapp.R
 import com.example.transportistaapp.databinding.FragmentMapaBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
@@ -32,6 +29,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.plugin.viewport.data.OverviewViewportStateOptions
 import com.mapbox.maps.plugin.viewport.viewport
 import kotlinx.coroutines.launch
 
@@ -42,38 +40,16 @@ class MapaFragment : Fragment() {
     private val viewModel: MapaViewModel by viewModels()
     private var mapView: MapView? = null
     private var locationAccess: Boolean = false
-    private var permissionsManager: PermissionsManager? = null
 
-    var permissionsListener: PermissionsListener = object : PermissionsListener {
-        override fun onExplanationNeeded(permissionsToExplain: List<String>) {
-        }
-
-        override fun onPermissionResult(granted: Boolean) {
-            if (granted) {
-                locationAccess = true
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (PermissionsManager.areLocationPermissionsGranted(requireContext())) {
-            locationAccess = true
-        } else {
-            permissionsManager = PermissionsManager(permissionsListener)
-            activity?.let { permissionsManager?.requestLocationPermissions(it) }
-        }
         // Obtener el JSON desde los argumentos
         arguments?.getString("coordenadas")?.let { json ->
             val coordenadasType = object : TypeToken<List<List<Double>>>() {}.type
             val coordenadas: List<List<Double>> = Gson().fromJson(json, coordenadasType)
             viewModel.setCoordenadas(coordenadas)  // Pasamos las coordenadas al ViewModel
         }
-        arguments?.getDouble("lat")?.let { latitud ->
-            val longitud = requireArguments().getDouble("long")
-//            viewModel.crearRuta(latitud, longitud)
-        }
-
     }
 
     override fun onCreateView(
@@ -94,14 +70,11 @@ class MapaFragment : Fragment() {
                                 addAnnotationsToMap(state.coordenadas)
                             }
 
-                            else -> {
-                                // Manejar otros estados como Loading o Error si es necesario
-                            }
+                            else -> {}
                         }
                     }
                 }
             }
-//            viewportDataSource = MapboxNavigationViewportDataSource
         }
         return binding.root
     }
@@ -113,7 +86,9 @@ class MapaFragment : Fragment() {
             location.puckBearing = PuckBearing.COURSE
             location.puckBearingEnabled = true
             viewport.transitionTo(
-                targetState = viewport.makeFollowPuckViewportState(),
+                targetState = viewport.makeOverviewViewportState(
+                    OverviewViewportStateOptions.Builder().build()
+                ),
                 transition = viewport.makeImmediateViewportTransition()
             )
         }
@@ -155,42 +130,5 @@ class MapaFragment : Fragment() {
             drawable.draw(canvas)
             bitmap
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initUI()
-    }
-
-    private fun initUI() {
-        initUIState()
-    }
-
-    private fun initUIState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.state.collect {
-                        when (it) {
-                            MapaState.Loading -> loadingState()
-                            is MapaState.Success -> successState(it.coordenadas)
-                            is MapaState.Error -> errorState(it.error)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun errorState(error: String) {
-        // TODO("Not yet implemented")
-    }
-
-    private fun successState(coordenadas: List<List<Double>>) {
-        // TODO("Not yet implemented")
-    }
-
-    private fun loadingState() {
-        // TODO("Not yet implemented")
     }
 }

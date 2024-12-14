@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.transportistaapp.data.database.entities.PaqueteEntity
 import java.util.Date
 
@@ -16,6 +17,12 @@ interface PaqueteDao {
 
     @Query("Select * FROM paquetes_table WHERE ruta=:ruta")
     suspend fun obtenerPorRuta(ruta:String):List<PaqueteEntity>
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(paquete: PaqueteEntity)
+
+    @Query("Select * FROM paquetes_table WHERE id = :id LIMIT 1")
+    suspend fun get(id: String): PaqueteEntity
 
     @Query("Select p.* FROM paquetes_table p JOIN rutas_table r ON r.id = p.ruta WHERE r.en_reparto = 1")
     suspend fun obtenerEnReparto() : List<PaqueteEntity>

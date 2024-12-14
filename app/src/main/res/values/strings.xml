@@ -28,4 +28,9 @@
     <string name="listado_de_cargas">Listado de Cargas</string>
     <string name="fin_dia">Fin dia</string>
     <string name="ruta_especifica">Ruta Específica</string>
+    <string name="entregar_paquete">Entregar paquete</string>
+    <string name="paquete">Paquete:</string>
+    <string name="recibe">Recibe:</string>
+    <string name="telefono">Telefono:</string>
+    <string name="validar">Validar</string>
 </resources>

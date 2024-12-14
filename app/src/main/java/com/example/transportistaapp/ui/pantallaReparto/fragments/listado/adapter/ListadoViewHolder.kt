@@ -10,12 +10,19 @@ class ListadoViewHolder(view: View) :
 
     private val binding = ItemPaqueteBinding.bind(view)
 
-    fun render(paquete: Paquete, onClickHandler: (Paquete) -> Unit){
+    fun render(
+        paquete: Paquete,
+        onClickHandler: (Paquete) -> Unit,
+        onEntregarClickHandler: (Paquete) -> Unit
+    ) {
         binding.tvEstado.text = paquete.estado
         binding.tvCodigoPaquete.text = paquete.id
         binding.tvDireccion.text = paquete.direccion
         binding.btnMapa.setOnClickListener {
             onClickHandler(paquete)
+        }
+        binding.leftHalf.setOnClickListener {
+            onEntregarClickHandler(paquete)
         }
     }
 

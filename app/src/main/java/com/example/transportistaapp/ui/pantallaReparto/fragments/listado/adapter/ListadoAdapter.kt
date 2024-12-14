@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.transportistaapp.R
 import com.example.transportistaapp.domain.model.Paquete
 
-class ListadoAdapter(private var paquetes:List<Paquete> = emptyList(),private val onClickHandler:(Paquete) -> Unit) :
+class ListadoAdapter(
+    private var paquetes: List<Paquete> = emptyList(),
+    private val onClickHandler: (Paquete) -> Unit,
+    private val onEntregarClickHandler: (Paquete) -> Unit
+) :
     RecyclerView.Adapter<ListadoViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListadoViewHolder {
         return ListadoViewHolder(
@@ -18,7 +22,7 @@ class ListadoAdapter(private var paquetes:List<Paquete> = emptyList(),private va
 
     override fun onBindViewHolder(holder: ListadoViewHolder, position: Int) {
         val paquete = paquetes[position]
-        holder.render(paquete, onClickHandler)
+        holder.render(paquete, onClickHandler, onEntregarClickHandler)
 
     }
 

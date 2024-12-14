@@ -34,7 +34,6 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
-import com.mapbox.android.core.permissions.PermissionsManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -57,7 +56,7 @@ class CargarRutaFragment : Fragment() {
         )
         .build()
     private val scanner: BarcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions)
-    private var cameraProvider: ProcessCameraProvider? = null // Declarar la variable
+    private var cameraProvider: ProcessCameraProvider? = null
     private val viewModel: CargarRutaViewModel by viewModels()
     private lateinit var cargarRutaAdapter: CargarRutaAdapter
 

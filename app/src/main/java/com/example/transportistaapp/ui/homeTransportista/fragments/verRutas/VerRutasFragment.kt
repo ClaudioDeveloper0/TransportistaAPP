@@ -59,8 +59,6 @@ class VerRutasFragment : Fragment() {
     private fun initListeners() {
         binding.btnIniciarEntregas.setOnClickListener {
             viewModel.comenzarEntregas()
-            val intent = Intent(requireContext(), RepartoActivity::class.java)
-            startActivity(intent)
         }
     }
 
@@ -90,6 +88,10 @@ class VerRutasFragment : Fragment() {
                         VerRutasState.Loading -> loadingState()
                         is VerRutasState.Error -> errorState(state.error)
                         is VerRutasState.Success -> successState(state.rutas)
+                        VerRutasState.IrARepartir -> {
+                            val intent = Intent(requireContext(), RepartoActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
                 }
             }

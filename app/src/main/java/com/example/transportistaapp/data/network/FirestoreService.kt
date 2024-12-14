@@ -10,8 +10,8 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.WriteBatch
-import com.google.firebase.firestore.getField
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 import javax.inject.Inject
 
 class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
@@ -39,23 +39,27 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
                 .get()
                 .await()
             paquetes.addAll(paquetesSnapshot.documents.map { p ->
-                Paquete(
+                val estado = when (p.getLong("estado") ?: 0L) {
+                    0L -> "Salió del centro de distribución"
+                    1L -> "Recepcionado por empresa transportista"
+                    2L -> "En reparto"
+                    3L -> "Entregado:"
+                    4L -> "Falla en entrega, devuelto a empresa transportista"
+                    5L -> "Falla en entrega, devuelto al vendedor"
+                    else -> "Estado desconocido"
+                }
+                val p = Paquete(
                     id = p.id,
                     contacto = p.getString("contacto") ?: "",
                     direccion = p.getString("direccion") ?: "",
                     receptor = p.getString("receptor") ?: "",
                     ruta = p.getString("ruta") ?: "",
-                    estado = when (p.getLong("estado") ?: 0L) {
-                        0L -> "Salió del centro de distribución"
-                        1L -> "Recepcionado por empresa transportista"
-                        2L -> "En reparto"
-                        3L -> "Entregado"
-                        4L -> "Falla en entrega, devuelto a empresa transportista"
-                        5L -> "Falla en entrega, devuelto al vendedor"
-                        else -> "Estado desconocido"
-                    },
-                    coordenadas = (p.get("coordenadas") as? List<*>)?.mapNotNull { it as? Double } ?: emptyList()
+                    estado = estado,
+                    coordenadas = (p.get("coordenadas") as? List<*>)?.mapNotNull { it as? Double }
+                        ?: emptyList()
                 )
+                Log.d("MaybeaLog firestoreService", "$estado, $p")
+                p
             })
         }
         val paquetesPorRuta = paquetes.groupBy { it.ruta }
@@ -117,11 +121,21 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
             .set(hashMapOf("cargado" to true), SetOptions.merge()).await()
     }
 
-    suspend fun comenzarEntregas(rutas: List<String>) {
+    suspend fun comenzarEntregas(rutas: List<String>, paquetes: List<String>) {
         val batch: WriteBatch = db.batch()
         rutas.forEach { rutaID ->
             val docRef = db.collection("Rutas").document(rutaID)
             batch.update(docRef, "en_reparto", true)
+        }
+        val fecha = Timestamp(Date())
+        paquetes.forEach { paqueteID ->
+            val docRef = db.collection("Paquetes").document(paqueteID)
+            val historial = hashMapOf(
+                "detalles" to "Saliendo a repartir tu pedido!",
+                "estado" to 2,
+                "fecha" to fecha
+            )
+            batch.update(docRef, "estado", 2, "historial", FieldValue.arrayUnion(historial))
         }
         batch.commit().await()
     }

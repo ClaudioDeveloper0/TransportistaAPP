@@ -25,7 +25,7 @@ data class PaqueteEntity(
     @ColumnInfo(name = "receptor") val receptor: String,
     @ColumnInfo(name = "fono") val fono: String,
     @ColumnInfo(name = "direccion") val direccion: String,
-    @ColumnInfo(name = "estado") val estado: Int,
+    @ColumnInfo(name = "estado") var estado: Int,
     @ColumnInfo(name = "ruta") val ruta: String,
     @ColumnInfo(name = "fechaEntrega") val fecha: Date = Date(),
     @ColumnInfo(name = "detalles") val detalles: String = "",
@@ -41,7 +41,7 @@ fun PaqueteEntity.toDomain(): Paquete {
         ruta = ruta,
         estado = when (estado) {
             0 -> "Salió del centro de distribución"
-            1 -> "Recepcionado por empresa transportista "
+            1 -> "Recepcionado por empresa transportista"
             2 -> "En reparto"
             3 -> "Entregado:"
             4 -> "Falla en entrega, devuelto a empresa transportista"
@@ -61,7 +61,7 @@ fun Paquete.toRoom(): PaqueteEntity {
         direccion = direccion,
         estado = when (estado) {
             "Salió del centro de distribución" -> 0
-            "Recepcionado por empresa transportista " -> 1
+            "Recepcionado por empresa transportista" -> 1
             "En reparto" -> 2
             "Entregado:" -> 3
             "Falla en entrega, devuelto a empresa transportista" -> 4

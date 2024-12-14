@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.transportistaapp.domain.model.Paquete
 import com.example.transportistaapp.domain.useCases.GetPaquetesByRouteUseCase
-import com.example.transportistaapp.domain.useCases.cargarRutaUseCase
+import com.example.transportistaapp.domain.useCases.CargarRutaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CargarRutaViewModel @Inject constructor(
     private val getPaquetesByRouteUseCase: GetPaquetesByRouteUseCase,  // Dependencia del repositorio
-    private val cargarRutaUseCase: cargarRutaUseCase
+    private val cargarRutaUseCase: CargarRutaUseCase
 
 ) : ViewModel() {
     private val _state = MutableStateFlow<CargarRutaState>(CargarRutaState.Loading)

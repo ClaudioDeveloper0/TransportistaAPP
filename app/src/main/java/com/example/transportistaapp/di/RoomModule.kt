@@ -16,7 +16,6 @@ import javax.inject.Singleton
 object RoomModule {
     private const val DATABASE_NAME = "LocalDatabase"
 
-
     @Singleton
     @Provides
     fun proveerRoom(@ApplicationContext context: Context) =
@@ -30,5 +29,9 @@ object RoomModule {
     @Singleton
     @Provides
     fun proveerRutaDao(db: LocalDatabase) = db.getRutaDao()
+
+    @Singleton
+    @Provides
+    fun proveerLastLoginDao(db: LocalDatabase) = db.getLastLoginDao()
 
 }

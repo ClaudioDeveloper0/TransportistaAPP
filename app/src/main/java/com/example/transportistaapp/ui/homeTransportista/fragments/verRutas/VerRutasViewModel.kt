@@ -37,6 +37,7 @@ class VerRutasViewModel  @Inject constructor(
     fun comenzarEntregas() {
         viewModelScope.launch {
             comenzarEntregasUseCase()
+            _state.value = VerRutasState.IrARepartir
         }
     }
 }

@@ -15,8 +15,8 @@ interface Repository {
     suspend fun obtenerPaquetesEnReparto(): List<Paquete>
     suspend fun terminarEntrega()
     suspend fun getPaquetesByRoute(routeId: String): List<Paquete>
-    suspend fun updatePaqueteStatus(paqueteId: String, nuevoEstado: String)
     suspend fun cargarRuta(rutaID:String)
     suspend fun comenzarEntregas()
-    suspend fun actualizarRuta(ruta: Ruta)
+    suspend fun getPaquete(id: String): Paquete
+    suspend fun registrarEntrega(paqueteID: String, data: Map<String, Any>)
 }

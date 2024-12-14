@@ -1,5 +1,7 @@
 package com.example.transportistaapp.data
 
+import android.util.Log
+import com.example.transportistaapp.data.database.dao.LastLoginDao
 import com.example.transportistaapp.data.database.dao.PaqueteDao
 import com.example.transportistaapp.data.database.dao.RutaDao
 import com.example.transportistaapp.data.database.entities.PaqueteEntity
@@ -19,9 +21,10 @@ class RepositoryImpl @Inject constructor(
     private val firestoreService: FirestoreService,
     private val firebaseAuth: FirebaseAuth,
     private val rutaDao: RutaDao,
-    private val paqueteDao: PaqueteDao
+    private val paqueteDao: PaqueteDao,
+    private val lastLogin: LastLoginDao,
 
-) : Repository {
+    ) : Repository {
     override suspend fun loginTransportista(user: String, password: String): FirebaseUser? {
         try {
             val result = firebaseAuth.signInWithEmailAndPassword(user, password).await()
@@ -37,16 +40,17 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateLocalPackages(transportista: String) {
-        if (rutaDao.rutasEnReparto().isNotEmpty()) {
+        if (transportista == lastLogin.get()?.uid && rutaDao.rutasEnReparto().isNotEmpty()) {
             return
-        }
-        paqueteDao.deleteAll()
-        rutaDao.deleteAll()
-        val rutasList = firestoreService.getRutasPorTransportista(transportista)
-        rutaDao.insertAll(rutasList.map { it.toRoom() })
-        rutasList.forEach { ruta ->
-            val paquetesEntityList = ruta.paquetes.map { it.toRoom() }
-            paqueteDao.insertAll(paquetesEntityList)
+        } else {
+            paqueteDao.deleteAll()
+            rutaDao.deleteAll()
+            val rutasList = firestoreService.getRutasPorTransportista(transportista)
+            rutaDao.insertAll(rutasList.map { it.toRoom() })
+            rutasList.forEach { ruta ->
+                val paquetesEntityList = ruta.paquetes.map { it.toRoom() }
+                paqueteDao.insertAll(paquetesEntityList)
+            }
         }
     }
 
@@ -95,10 +99,6 @@ class RepositoryImpl @Inject constructor(
         return paquetes.map { it.toDomain() }
     }
 
-    override suspend fun updatePaqueteStatus(paqueteId: String, nuevoEstado: String) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun cargarRuta(rutaID: String) {
         rutaDao.cargarRuta(rutaID)
         firestoreService.cargarRuta(rutaID)
@@ -106,16 +106,32 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun comenzarEntregas() {
         val idRutas = mutableListOf<String>()
+        val idPaquetes = mutableListOf<String>()
         rutaDao.getAll().map {
             if (it.cargado) {
+                idRutas.add(it.id)
                 it.enReparto = true
             }
             it
         }.forEach { rutaEntity ->
-            idRutas.add(rutaEntity.id)
             rutaDao.updateRuta(rutaEntity)
+            if (rutaEntity.enReparto) {
+                paqueteDao.obtenerPorRuta(rutaEntity.id).forEach { paqueteEntity ->
+                    idPaquetes.add(paqueteEntity.id)
+                    paqueteEntity.estado = 2
+                    paqueteDao.update(paqueteEntity)
+                    Log.d("MaybeaLog", paqueteDao.get(paqueteEntity.id).toString())
+                }
+            }
         }
-        firestoreService.comenzarEntregas(idRutas)
+        firestoreService.comenzarEntregas(idRutas, idPaquetes)
+    }
 
+    override suspend fun getPaquete(id: String): Paquete {
+        return paqueteDao.get(id).toDomain()
+    }
+
+    override suspend fun registrarEntrega(paqueteID: String, data: Map<String, Any>) {
+        paqueteDao.entregar(paqueteID, Date())
     }
 }

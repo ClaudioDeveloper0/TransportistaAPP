@@ -11,8 +11,9 @@ import com.example.transportistaapp.data.database.entities.*
     entities = [
         PaqueteEntity::class,
         RutaEntity::class,
+        LastLogin::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
 
 )
@@ -22,4 +23,6 @@ abstract class LocalDatabase : RoomDatabase() {
     abstract fun getPaqueteDao():PaqueteDao
 
     abstract fun getRutaDao():RutaDao
+
+    abstract fun getLastLoginDao(): LastLoginDao
 }

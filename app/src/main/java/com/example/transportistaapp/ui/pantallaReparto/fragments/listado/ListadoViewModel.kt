@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListadoViewModel@Inject constructor(
-    private var getRutasActivasUseCase: GetRutasActivasUseCase,
+    private val getRutasActivasUseCase: GetRutasActivasUseCase,
 ) : ViewModel() {
 
     private val _paquetes = MutableLiveData<List<Paquete>>()
@@ -34,12 +34,14 @@ class ListadoViewModel@Inject constructor(
             rutas.forEach {
                 paquetes.addAll(it.paquetes)
             }
+
             if (paquetes.isEmpty()) {
                 _state.value =
                     ListadoState.Error("Ha ocurrido un error, getStockUseCase() -> null")
             } else {
                 _paquetes.value = paquetes
-                _state.value = ListadoState.Success(paquetes = paquetes)
+                _state.value =
+                    ListadoState.Success(paquetes = paquetes.filter { it.estado == "En reparto" })
             }
 
         }
