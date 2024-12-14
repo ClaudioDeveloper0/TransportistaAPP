@@ -12,7 +12,7 @@ import com.example.transportistaapp.data.database.entities.*
         PaqueteEntity::class,
         RutaEntity::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = true,
 
 )

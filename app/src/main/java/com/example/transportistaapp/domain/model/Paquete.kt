@@ -12,6 +12,7 @@ data class Paquete (
     var estado : String,
     var fecha : Date = Date(),
     var detalles : String = "",
-    var validado : Boolean = false
+    var validado : Boolean = false,
+    val coordenadas : List<Double>
 )
 

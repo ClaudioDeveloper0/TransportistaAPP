@@ -6,7 +6,6 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
-
 }
 
 android {
@@ -52,15 +51,11 @@ android {
 
 dependencies {
 
+    //Mapbox is back
+    implementation(libs.android)
+//    implementation("com.mapbox.navigationcore:android:3.6.0-rc.1")
+//    implementation("com.mapbox.navigationcore:ui-components:3.6.0-rc.1")
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
 
     // ViewModel y LiveData
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -77,13 +72,11 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     kapt(libs.hilt.android.compiler)
 
-
     // CameraX dependencies
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.camera2)  // Esto es importante
-
 
     // códigos de barras / QR
     implementation(libs.barcode.scanning)
@@ -95,10 +88,17 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
-
     //fragments
     implementation(libs.androidx.fragment.ktx)
 
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)

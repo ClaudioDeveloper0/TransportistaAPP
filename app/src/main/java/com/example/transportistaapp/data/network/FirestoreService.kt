@@ -10,11 +10,12 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.WriteBatch
+import com.google.firebase.firestore.getField
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
-    suspend fun getRutasPorTransportista(uid : String) :List<Ruta>{
+    suspend fun getRutasPorTransportista(uid: String): List<Ruta> {
         val rutasSnapshot = db.collection("Rutas")
             .whereEqualTo("transportista", uid)
             .whereEqualTo("activa", true)
@@ -52,7 +53,8 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
                         4L -> "Falla en entrega, devuelto a empresa transportista"
                         5L -> "Falla en entrega, devuelto al vendedor"
                         else -> "Estado desconocido"
-                    }
+                    },
+                    coordenadas = (p.get("coordenadas") as? List<*>)?.mapNotNull { it as? Double } ?: emptyList()
                 )
             })
         }
@@ -109,9 +111,19 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
             batch.commit().await()
         }
     }
-    suspend fun cargarRuta(rutaID:String) {
-            db.collection("Rutas").document(rutaID)
-                .set(hashMapOf("cargado" to true), SetOptions.merge()).await()
+
+    suspend fun cargarRuta(rutaID: String) {
+        db.collection("Rutas").document(rutaID)
+            .set(hashMapOf("cargado" to true), SetOptions.merge()).await()
+    }
+
+    suspend fun comenzarEntregas(rutas: List<String>) {
+        val batch: WriteBatch = db.batch()
+        rutas.forEach { rutaID ->
+            val docRef = db.collection("Rutas").document(rutaID)
+            batch.update(docRef, "en_reparto", true)
+        }
+        batch.commit().await()
     }
 
 }

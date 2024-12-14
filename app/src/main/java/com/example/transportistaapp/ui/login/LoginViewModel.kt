@@ -26,13 +26,13 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
-            try {
                 val user = loginTransportistaUseCase(email, password)
                 _loginState.value = if (user != null) {
                     LoginState.Success
                 } else {
                     LoginState.Failure("Usuario no encontrado")
                 }
+            try {
             } catch (e: Exception) {
                 _loginState.value = LoginState.Failure(FirebaseErrorUtils.getErrorMessage(e))
             }

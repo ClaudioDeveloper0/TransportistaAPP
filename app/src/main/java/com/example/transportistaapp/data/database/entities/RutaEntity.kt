@@ -11,7 +11,7 @@ data class RutaEntity(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo("id") val id : String,
     @ColumnInfo("alias") val alias: String,
-    @ColumnInfo("en_reparto") val enReparto: Boolean,
+    @ColumnInfo("en_reparto") var enReparto: Boolean,
     @ColumnInfo("cargado") val cargado: Boolean,
     @ColumnInfo("completado") val completado: Boolean,
 )

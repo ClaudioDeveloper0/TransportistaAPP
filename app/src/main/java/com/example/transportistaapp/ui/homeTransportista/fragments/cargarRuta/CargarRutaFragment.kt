@@ -34,6 +34,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import com.mapbox.android.core.permissions.PermissionsManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -81,7 +82,6 @@ class CargarRutaFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnEscanearCaja.setOnClickListener {
-            // Iniciar la camara y la captura del codigo de barra
             checkCameraPermission()
         }
     }

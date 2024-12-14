@@ -13,7 +13,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.transportistaapp.databinding.FragmentListadoBinding
 import com.example.transportistaapp.domain.model.Paquete
+import com.example.transportistaapp.ui.homeTransportista.RutasActivity
+import com.example.transportistaapp.ui.pantallaReparto.RepartoActivity
 import com.example.transportistaapp.ui.pantallaReparto.fragments.listado.adapter.ListadoAdapter
+import com.example.transportistaapp.ui.pantallaReparto.fragments.mapa.MapaFragment
+import com.google.gson.Gson
+import com.mapbox.android.core.permissions.PermissionsListener
+import com.mapbox.android.core.permissions.PermissionsManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -23,10 +29,19 @@ class ListadoFragment : Fragment() {
     private val binding get() = _binding!!
     private val listadoViewModel: ListadoViewModel by viewModels()
     private lateinit var listadoAdapter: ListadoAdapter
+    private var permissionsListener: PermissionsListener = object : PermissionsListener {
+        override fun onExplanationNeeded(permissionsToExplain: List<String>) { }
+        override fun onPermissionResult(granted: Boolean) { }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        if (!PermissionsManager.areLocationPermissionsGranted(requireContext())) {
+            val permissionsManager = PermissionsManager(permissionsListener)
+            activity?.let { permissionsManager.requestLocationPermissions(it) }
+        }
         _binding = FragmentListadoBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -42,18 +57,40 @@ class ListadoFragment : Fragment() {
     private fun initUI(){
         initPaquetes()
         initUIState()
+        initListeners()
     }
+
+    private fun initListeners() {
+        binding.btnVerMapa.setOnClickListener {
+            val paquetes:List<Paquete> = listadoViewModel.paquetes.value ?: emptyList()
+            val coordenadas = paquetes.map { it.coordenadas }
+            val jsonCoordenadas = Gson().toJson(coordenadas)
+            val mapaFragment = MapaFragment().apply {
+                arguments = Bundle().apply {
+                    putString("coordenadas", jsonCoordenadas)
+                }
+            }
+            val fragmentContainerId = (requireActivity() as RepartoActivity).binding.fragmentContainer.id
+            parentFragmentManager.beginTransaction()
+                .replace(fragmentContainerId, mapaFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
     private fun initPaquetes() {
         listadoAdapter = ListadoAdapter() { dato ->
-//            val mapaFragment = MapaFragment().apply {  // aqui cambia MapaFragment por el fragmento a donde quieras redirccionar
-//                arguments = Bundle().apply {
-//                    putString("paqueteId", dato.id) //esto son parametros que le puedes pasar
-//                }
-//            }
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragmentContainer, mapaFragment) // aquí tienes que meter el fragmento
-//                .addToBackStack(null)
-//                .commit()
+            val mapaFragment = MapaFragment().apply {  // aqui cambia MapaFragment por el fragmento a donde quieras redirccionar
+                arguments = Bundle().apply {
+                    putDouble("lat", dato.coordenadas[0])
+                    putDouble("long", dato.coordenadas[1])
+                }
+            }
+            val activityBinding = (requireActivity() as RepartoActivity).binding
+            parentFragmentManager.beginTransaction()
+                .replace(activityBinding.fragmentContainer.id, mapaFragment) // aquí tienes que meter el fragmento
+                .addToBackStack(null)
+                .commit()
         }
         binding.recyclerViewCajas.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

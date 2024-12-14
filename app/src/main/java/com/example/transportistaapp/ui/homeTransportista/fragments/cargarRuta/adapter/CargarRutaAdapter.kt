@@ -12,7 +12,7 @@ class CargarRutaAdapter (private var paquetes:List<Paquete> = emptyList()) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CargarRutaViewHolder {
         return CargarRutaViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_box, parent, false), parent.context
+                .inflate(R.layout.item_box, parent, false)
         )
     }
     override fun onBindViewHolder(holder: CargarRutaViewHolder, position: Int) {

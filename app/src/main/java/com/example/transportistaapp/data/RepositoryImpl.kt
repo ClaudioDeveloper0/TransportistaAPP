@@ -104,4 +104,18 @@ class RepositoryImpl @Inject constructor(
         firestoreService.cargarRuta(rutaID)
     }
 
+    override suspend fun comenzarEntregas() {
+        val idRutas = mutableListOf<String>()
+        rutaDao.getAll().map {
+            if (it.cargado) {
+                it.enReparto = true
+            }
+            it
+        }.forEach { rutaEntity ->
+            idRutas.add(rutaEntity.id)
+            rutaDao.updateRuta(rutaEntity)
+        }
+        firestoreService.comenzarEntregas(idRutas)
+
+    }
 }

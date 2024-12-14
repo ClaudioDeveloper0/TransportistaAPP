@@ -66,7 +66,6 @@ class VerRutasFragment : Fragment() {
 
     private fun initAdapter() {
         verRutasAdapter = VerRutasAdapter { ruta ->
-            // Redirigir al nuevo fragmento con los parámetros
             val detalleFragment = CargarRutaFragment().apply {
                 arguments = Bundle().apply {
                     putString("rutaId", ruta.id) // Pasar el ID de la ruta como argumento
@@ -98,7 +97,6 @@ class VerRutasFragment : Fragment() {
     }
     private fun successState(rutas:List<Ruta>) {
         if (rutas.any { it.enReparto }) {
-            // Si alguna ruta está en reparto, iniciar la actividad de reparto
             val intent = Intent(requireContext(), RepartoActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.transportistaapp.data.database.entities.RutaEntity
 
 
@@ -20,8 +21,11 @@ interface RutaDao {
     @Query("UPDATE rutas_table SET cargado=1 WHERE id=:ruta")
     suspend fun cargarRuta(ruta: String)
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateRuta(rutaEntity: RutaEntity)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(paquetes: List<RutaEntity>)
+    suspend fun insertAll(rutas: List<RutaEntity>)
 
     @Query("DELETE FROM rutas_table")
     suspend fun deleteAll()

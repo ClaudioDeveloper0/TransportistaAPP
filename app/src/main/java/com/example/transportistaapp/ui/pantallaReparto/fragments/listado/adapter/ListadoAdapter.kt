@@ -12,7 +12,7 @@ class ListadoAdapter(private var paquetes:List<Paquete> = emptyList(),private va
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListadoViewHolder {
         return ListadoViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_paquete, parent, false), parent.context
+                .inflate(R.layout.item_paquete, parent, false)
         )
     }
 

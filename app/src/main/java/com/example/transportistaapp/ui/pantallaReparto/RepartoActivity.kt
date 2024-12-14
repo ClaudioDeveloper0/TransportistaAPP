@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RepartoActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRepartoBinding
+    lateinit var binding: ActivityRepartoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
