@@ -1,14 +1,19 @@
 package com.example.transportistaapp.ui.pantallaReparto.fragments.listado
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +38,25 @@ class ListadoFragment : Fragment() {
     private val binding get() = _binding!!
     private val listadoViewModel: ListadoViewModel by viewModels()
     private lateinit var listadoAdapter: ListadoAdapter
+    private val cameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    pedirPermiso()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Debes habilitar el acceso a la Ubicación",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri: Uri = Uri.fromParts("package", requireContext().packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                }
+            }
+        }
+
     private var permissionsListener: PermissionsListener = object : PermissionsListener {
         override fun onExplanationNeeded(permissionsToExplain: List<String>) {}
         override fun onPermissionResult(granted: Boolean) {}
@@ -42,6 +66,7 @@ class ListadoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        pedirPermiso()
         if (!PermissionsManager.areLocationPermissionsGranted(requireContext())) {
             val permissionsManager = PermissionsManager(permissionsListener)
             activity?.let { permissionsManager.requestLocationPermissions(it) }
@@ -56,6 +81,7 @@ class ListadoFragment : Fragment() {
     }
 
     override fun onResume() {
+        pedirPermiso()
         super.onResume()
         listadoAdapter.updateList(emptyList())
         actualizarMovimientos()
@@ -129,7 +155,7 @@ class ListadoFragment : Fragment() {
                 launch {
                     listadoViewModel.state.collect {
                         when (it) {
-                            ListadoState.Loading -> loadingState()
+                            ListadoState.Loading -> {}
                             is ListadoState.Success -> successState(it.paquetes)
                             is ListadoState.Error -> errorState(it.error)
                             ListadoState.PaquetesEntregados -> {
@@ -152,10 +178,6 @@ class ListadoFragment : Fragment() {
         }
     }
 
-    private fun loadingState() {
-        //TODO("Hay que poner un spinner o algo de cargando en la pantalla")
-    }
-
     private fun successState(paquetes: List<Paquete>) {
         listadoAdapter.updateList(paquetes)
     }
@@ -167,5 +189,15 @@ class ListadoFragment : Fragment() {
 
     private fun actualizarMovimientos() {
         listadoViewModel.cargarRutas()
+    }
+
+    private fun pedirPermiso() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            cameraPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
     }
 }

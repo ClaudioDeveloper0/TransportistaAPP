@@ -52,9 +52,7 @@ android {
 dependencies {
 
     //Mapbox is back
-    implementation("com.mapbox.maps:android:11.8.0")
-    implementation("com.mapbox.navigationcore:android:3.5.0")
-    implementation("com.mapbox.navigationcore:ui-components:3.5.0")
+    implementation(libs.android)
 
 
     // ViewModel y LiveData

@@ -1,13 +1,13 @@
 package com.example.transportistaapp.ui.homeTransportista.fragments.verRutas
 
 import android.content.Intent
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -85,7 +85,7 @@ class VerRutasFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     when (state) {
-                        VerRutasState.Loading -> loadingState()
+                        VerRutasState.Loading -> {}
                         is VerRutasState.Error -> errorState(state.error)
                         is VerRutasState.Success -> successState(state.rutas)
                         VerRutasState.IrARepartir -> {
@@ -113,9 +113,5 @@ class VerRutasFragment : Fragment() {
 
     private fun errorState(error:String) {
         Log.d("Maybealog RutasActivity errorState()", error)
-    }
-
-    private fun loadingState() {
-        // TODO("Not yet implemented")
     }
 }

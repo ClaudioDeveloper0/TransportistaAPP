@@ -1,13 +1,13 @@
 package com.example.transportistaapp.ui.pantallaReparto.fragments.entregarPaquete
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -51,7 +51,7 @@ class EntregarPaqueteFragment : Fragment() {
                 launch {
                     viewModel.state.collect {
                         when (it) {
-                            EntregarPaqueteState.Loading -> loadingState()
+                            EntregarPaqueteState.Loading -> {}
                             is EntregarPaqueteState.Success -> successState(it.paquete)
                             is EntregarPaqueteState.Error -> errorState(it.error)
                             EntregarPaqueteState.BackCajas -> {
@@ -62,10 +62,6 @@ class EntregarPaqueteFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun loadingState() {
-        //TODO("Hay que poner un spinner o algo de cargando en la pantalla")
     }
 
     private fun successState(p: Paquete) {

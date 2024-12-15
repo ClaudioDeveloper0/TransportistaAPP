@@ -7,17 +7,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Permisos camara-->
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature android:name="android.hardware.camera.autofocus"
-        tools:ignore="UnnecessaryRequiredFeature" />
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
-
-
     <!-- general location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- precise location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        tools:ignore="UnnecessaryRequiredFeature" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <queries>
         <package android:name="com.google.android.apps.maps" />

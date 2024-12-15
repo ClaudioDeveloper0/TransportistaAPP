@@ -1,17 +1,19 @@
 package com.example.transportistaapp.ui.homeTransportista.fragments.cargarRuta
 
-import android.content.pm.PackageManager
 import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.ToneGenerator
-import androidx.fragment.app.viewModels
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -20,6 +22,8 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -59,12 +63,27 @@ class CargarRutaFragment : Fragment() {
     private var cameraProvider: ProcessCameraProvider? = null
     private val viewModel: CargarRutaViewModel by viewModels()
     private lateinit var cargarRutaAdapter: CargarRutaAdapter
+    private val cameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) {
+                Toast.makeText(
+                    context,
+                    "Debes habilitar el acceso a la Cámara",
+                    Toast.LENGTH_LONG
+                ).show()
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCargarRutaBinding.inflate(layoutInflater, container, false)
+        pedirPermisos()
         return binding.root
     }
 
@@ -81,7 +100,7 @@ class CargarRutaFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnEscanearCaja.setOnClickListener {
-            checkCameraPermission()
+            startCamera()
         }
     }
 
@@ -102,7 +121,7 @@ class CargarRutaFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     when (state) {
-                        CargarRutaState.Loading -> loadingState()
+                        CargarRutaState.Loading -> {}
                         is CargarRutaState.Error -> errorState(state.error)
                         is CargarRutaState.Success -> successState(state.rutas)
                     }
@@ -117,10 +136,6 @@ class CargarRutaFragment : Fragment() {
 
     private fun errorState(error: String) {
         Log.d("MaybeaLog CargarRutaFragment 63", "Error: $error")
-    }
-
-    private fun loadingState() {
-//        TODO("Not yet implemented")
     }
 
     private fun initAdapter() {
@@ -191,10 +206,11 @@ class CargarRutaFragment : Fragment() {
                             }
                             if (validacion[1]) {
                                 viewModel.validarRuta(arguments?.getString("rutaId") ?: "")
-                            imageProxy.close()
+                                imageProxy.close()
                                 stopCamera()
                                 val verRutasFragment = VerRutasFragment()
-                                val fragmentContainerId = (requireActivity() as RutasActivity).binding.fragmentContainer.id
+                                val fragmentContainerId =
+                                    (requireActivity() as RutasActivity).binding.fragmentContainer.id
                                 parentFragmentManager.beginTransaction()
                                     .replace(fragmentContainerId, verRutasFragment)
                                     .addToBackStack(null) // Agregar a la pila para permitir volver atrás
@@ -218,30 +234,14 @@ class CargarRutaFragment : Fragment() {
     private fun stopCamera() {
         cameraProvider?.unbindAll() // Si estás usando CameraX
     }
-    private fun checkCameraPermission() {
+
+    private fun pedirPermisos() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
-        } else {
-            startCamera()
-        }
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startCamera()
-        } else {
-            Toast.makeText(requireContext(), "Permiso de cámara denegado", Toast.LENGTH_SHORT)
-                .show()
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
@@ -249,8 +249,5 @@ class CargarRutaFragment : Fragment() {
         Log.d("MaybeaLog beep cargarRutaFragment", "Se ejecuta el beep")
         val toneGenerator = ToneGenerator(AudioManager.STREAM_MUSIC, 100) // 100 es el volumen
         toneGenerator.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200) // 500ms de duración
-    }
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 100
     }
 }

@@ -7,21 +7,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.transportistaapp.databinding.FragmentBarcodeScannerBinding
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -34,6 +35,20 @@ class BarcodeScannerFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var successCode: String
     private var errorCount: Int = 0
+    private val cameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) {
+                Toast.makeText(
+                    context,
+                    "Debes habilitar el acceso a la Cámara",
+                    Toast.LENGTH_LONG
+                ).show()
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +91,7 @@ class BarcodeScannerFragment : Fragment() {
     }
 
     private fun requestCameraPermission() {
-        requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
+        cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
     private fun showPermissionDeniedDialog() {
@@ -99,14 +114,12 @@ class BarcodeScannerFragment : Fragment() {
             val preview = Preview.Builder().build().also {
                 it.surfaceProvider = previewView.surfaceProvider
             }
-
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             val imageAnalysis = ImageAnalysis.Builder().build().also { analysis ->
                 analysis.setAnalyzer(Executors.newSingleThreadExecutor()) { imageProxy ->
                     processImageProxy(imageProxy)
                 }
             }
-
             cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
         }, ContextCompat.getMainExecutor(requireContext()))
     }
@@ -150,23 +163,4 @@ class BarcodeScannerFragment : Fragment() {
         barcodeScanner.close()
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startCamera(binding.previewView)
-        } else {
-            Toast.makeText(requireContext(), "Permiso de cámara denegado", Toast.LENGTH_SHORT)
-                .show()
-            parentFragmentManager.popBackStack()
-        }
-    }
-
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 100
-    }
 }
