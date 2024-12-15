@@ -29,5 +29,5 @@
     <string name="tel_fono">Teléfono:</string>
     <string name="alinea_el_codigo">Alinea el código dentro del marco</string>
     <string name="ingresar_manualmente">Ingresar manualmente</string>
-    <string name="escanea_el_codigo">Escanea el código de barras</string>
+    <string name="escanea_el_codigo">Escanea el código</string>
 </resources>
