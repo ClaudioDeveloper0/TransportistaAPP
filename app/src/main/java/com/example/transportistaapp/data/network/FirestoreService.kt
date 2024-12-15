@@ -48,7 +48,7 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
                     5L -> "Falla en entrega, devuelto al vendedor"
                     else -> "Estado desconocido"
                 }
-                val p = Paquete(
+                val paq = Paquete(
                     id = p.id,
                     contacto = p.getString("contacto") ?: "",
                     direccion = p.getString("direccion") ?: "",
@@ -58,8 +58,7 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
                     coordenadas = (p.get("coordenadas") as? List<*>)?.mapNotNull { it as? Double }
                         ?: emptyList()
                 )
-                Log.d("MaybeaLog firestoreService", "$estado, $p")
-                p
+                paq
             })
         }
         val paquetesPorRuta = paquetes.groupBy { it.ruta }
@@ -68,7 +67,6 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
         }
         return rutas
     }
-
     suspend fun esTransportista(user: FirebaseUser): Boolean {
         return try {
             val document = db.collection("Usuarios").document(user.uid).get().await()
@@ -79,7 +77,6 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
             false
         }
     }
-
     suspend fun terminarRutas(rutas: List<Ruta>) {
         rutas.forEach {
             val data = hashMapOf(
@@ -92,35 +89,10 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
                 .set(data, SetOptions.merge()).await()
         }
     }
-
-    suspend fun terminarPaquetes(paquetes: List<Paquete>) {
-        val batchSize = 500
-        paquetes.chunked(batchSize).forEach { paqueteChunk ->
-            val batch: WriteBatch = db.batch()
-            paqueteChunk.forEach { paquete ->
-                val docRef = db.collection("Rutas").document(paquete.id)
-                val historial = hashMapOf(
-                    "detalles" to paquete.detalles,
-                    "estado" to paquete.estado,
-                    "fecha" to Timestamp(paquete.fecha)
-                )
-                batch.update(
-                    docRef,
-                    "estado", paquete.estado,
-                    "contacto", paquete.contacto,
-                    "receptor", paquete.receptor,
-                    "historial", FieldValue.arrayUnion(historial)
-                )
-            }
-            batch.commit().await()
-        }
-    }
-
     suspend fun cargarRuta(rutaID: String) {
         db.collection("Rutas").document(rutaID)
             .set(hashMapOf("cargado" to true), SetOptions.merge()).await()
     }
-
     suspend fun comenzarEntregas(rutas: List<String>, paquetes: List<String>) {
         val batch: WriteBatch = db.batch()
         rutas.forEach { rutaID ->
@@ -139,5 +111,19 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
         }
         batch.commit().await()
     }
-
+    suspend fun entregarPaquete(paqueteID: String, data: Map<String, Any>) {
+        val nombre = data["nombre"]
+        val rut = data["rut"]
+        var tel = data["telefono"]
+        if (tel != "") {
+            tel = ", telefono: $tel"
+        }
+        val historial = hashMapOf(
+            "detalles" to "Entregado a $nombre$tel, RUT:$rut",
+            "estado" to 3,
+            "fecha" to Timestamp(Date())
+        )
+        db.collection("Paquetes").document(paqueteID)
+            .update("estado", 3, "historial", FieldValue.arrayUnion(historial))
+    }
 }

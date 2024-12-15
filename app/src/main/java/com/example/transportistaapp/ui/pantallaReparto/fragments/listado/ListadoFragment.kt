@@ -16,6 +16,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.transportistaapp.databinding.FragmentListadoBinding
 import com.example.transportistaapp.domain.model.Paquete
+import com.example.transportistaapp.ui.homeTransportista.RutasActivity
 import com.example.transportistaapp.ui.pantallaReparto.RepartoActivity
 import com.example.transportistaapp.ui.pantallaReparto.fragments.entregarPaquete.EntregarPaqueteFragment
 import com.example.transportistaapp.ui.pantallaReparto.fragments.listado.adapter.ListadoAdapter
@@ -69,7 +70,7 @@ class ListadoFragment : Fragment() {
     private fun initListeners() {
         binding.btnVerMapa.setOnClickListener {
             val paquetes: List<Paquete> = listadoViewModel.paquetes.value ?: emptyList()
-            val coordenadas = paquetes.map { it.coordenadas }
+            val coordenadas = paquetes.filter { it.estado == "En reparto" }.map { it.coordenadas }
             val jsonCoordenadas = Gson().toJson(coordenadas)
             val mapaFragment = MapaFragment().apply {
                 arguments = Bundle().apply {
@@ -82,10 +83,6 @@ class ListadoFragment : Fragment() {
                 .replace(fragmentContainerId, mapaFragment)
                 .addToBackStack(null)
                 .commit()
-        }
-
-        binding.btnEscanearCaja.setOnClickListener {
-
         }
     }
 
@@ -135,6 +132,19 @@ class ListadoFragment : Fragment() {
                             ListadoState.Loading -> loadingState()
                             is ListadoState.Success -> successState(it.paquetes)
                             is ListadoState.Error -> errorState(it.error)
+                            ListadoState.PaquetesEntregados -> {
+                                listadoViewModel.terminarEntrega()
+                                Toast.makeText(context, "Ruta terminada!!", Toast.LENGTH_SHORT)
+                                    .show()
+
+                            }
+
+                            ListadoState.RutasTerminadas -> {
+                                val intent = Intent(requireContext(), RutasActivity::class.java)
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
+                            }
                         }
                     }
                 }

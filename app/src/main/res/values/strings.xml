@@ -33,4 +33,6 @@
     <string name="recibe">Recibe:</string>
     <string name="telefono">Telefono:</string>
     <string name="validar">Validar</string>
+    <string name="cajas_no_entregadas">Cajas no entregadas:</string>
+    <string name="terminar_entregas">Terminar entregas</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.transportistaapp.data.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -29,4 +30,7 @@ interface RutaDao {
 
     @Query("DELETE FROM rutas_table")
     suspend fun deleteAll()
+
+    @Delete(entity = RutaEntity::class)
+    suspend fun terminar(ruta: RutaEntity)
 }

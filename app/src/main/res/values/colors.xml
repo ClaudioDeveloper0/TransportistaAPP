@@ -11,6 +11,8 @@
     <color name="orange_button">#FF8800</color>
     <color name="orange_button_start">#FF8800</color>
     <color name="orange_button_end">#b56908</color>
+    <color name="gray_button_start">#898989</color>
+    <color name="gray_button_end">#7A7A7A</color>
     <color name="black_custom_start">#c78d46</color>
     <color name="black_custom_end">#c78d46</color>
     <color name="text_color_gris">#434343</color>

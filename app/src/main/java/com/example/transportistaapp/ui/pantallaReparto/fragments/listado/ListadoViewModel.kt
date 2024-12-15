@@ -1,11 +1,13 @@
 package com.example.transportistaapp.ui.pantallaReparto.fragments.listado
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.transportistaapp.domain.model.Paquete
 import com.example.transportistaapp.domain.useCases.GetRutasActivasUseCase
+import com.example.transportistaapp.domain.useCases.TerminarEntregaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,15 +17,15 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ListadoViewModel@Inject constructor(
+class ListadoViewModel @Inject constructor(
     private val getRutasActivasUseCase: GetRutasActivasUseCase,
+    private val terminarEntregaUseCase: TerminarEntregaUseCase
 ) : ViewModel() {
 
     private val _paquetes = MutableLiveData<List<Paquete>>()
     val paquetes: LiveData<List<Paquete>> = _paquetes
     private var _state = MutableStateFlow<ListadoState>(ListadoState.Loading)
     val state: StateFlow<ListadoState> = _state
-
 
 
     fun cargarRutas() {
@@ -35,15 +37,31 @@ class ListadoViewModel@Inject constructor(
                 paquetes.addAll(it.paquetes)
             }
 
+            Log.d("Maybealog ListadoVM", paquetes.toString())
             if (paquetes.isEmpty()) {
                 _state.value =
                     ListadoState.Error("Ha ocurrido un error, getStockUseCase() -> null")
             } else {
                 _paquetes.value = paquetes
-                _state.value =
-                    ListadoState.Success(paquetes = paquetes.filter { it.estado == "En reparto" })
+                Log.d(
+                    "MaybeaLog ListadoVM 47",
+                    paquetes.find { it.estado == "En reparto" }.toString()
+                )
+                if (paquetes.find { it.estado == "En reparto" } == null) {
+                    _state.value = ListadoState.PaquetesEntregados
+                } else {
+                    _state.value =
+                        ListadoState.Success(paquetes = paquetes.filter { it.estado == "En reparto" })
+                }
             }
 
+        }
+    }
+
+    fun terminarEntrega() {
+        viewModelScope.launch {
+            terminarEntregaUseCase()
+            _state.value = ListadoState.RutasTerminadas
         }
     }
 }

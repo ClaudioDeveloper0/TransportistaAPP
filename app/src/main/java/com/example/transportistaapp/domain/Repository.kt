@@ -11,7 +11,6 @@ interface Repository {
     suspend fun getRutasActivas(): List<Ruta>
     suspend fun marcarCajaEntregada(cajaId: String, fechaEntrega: Date)
     suspend fun marcarCajaNoEntregada(cajaId: String, motivo: String)
-    suspend fun obtenerPaquetesNoEntregados(): List<Paquete>
     suspend fun obtenerPaquetesEnReparto(): List<Paquete>
     suspend fun terminarEntrega()
     suspend fun getPaquetesByRoute(routeId: String): List<Paquete>

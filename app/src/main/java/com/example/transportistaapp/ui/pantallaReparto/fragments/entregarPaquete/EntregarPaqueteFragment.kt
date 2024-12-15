@@ -54,6 +54,9 @@ class EntregarPaqueteFragment : Fragment() {
                             EntregarPaqueteState.Loading -> loadingState()
                             is EntregarPaqueteState.Success -> successState(it.paquete)
                             is EntregarPaqueteState.Error -> errorState(it.error)
+                            EntregarPaqueteState.BackCajas -> {
+                                parentFragmentManager.popBackStack()
+                            }
                         }
                     }
                 }
@@ -111,6 +114,7 @@ class EntregarPaqueteFragment : Fragment() {
         binding.checkboxReceptor.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.editTextNombre.setText(paquete.receptor)
+                binding.editTextTelefono.setText("")
                 binding.editTextNombre.visibility = View.GONE
                 binding.textViewNombre.visibility = View.GONE
                 binding.editTextTelefono.visibility = View.GONE
@@ -127,7 +131,7 @@ class EntregarPaqueteFragment : Fragment() {
             viewModel.registrarEntrega(
                 binding.editTextNombre.text.toString(),
                 binding.editTextRut.text.toString(),
-                binding.editTextTelefono.toString(),
+                binding.editTextTelefono.text.toString(),
                 paquete.id
             )
         }

@@ -39,6 +39,7 @@ class EntregarPaqueteViewModel @Inject constructor(
         )
         viewModelScope.launch {
             registrarEntregaUseCase(paqueteID, data)
+            _state.value = EntregarPaqueteState.BackCajas
         }
     }
 }

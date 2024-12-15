@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.transportistaapp.data.database.dao.LastLoginDao
 import com.example.transportistaapp.data.database.dao.PaqueteDao
 import com.example.transportistaapp.data.database.dao.RutaDao
-import com.example.transportistaapp.data.database.entities.PaqueteEntity
 import com.example.transportistaapp.data.database.entities.toDomain
 import com.example.transportistaapp.data.database.entities.toRoom
 import com.example.transportistaapp.data.network.FirestoreService
@@ -76,22 +75,12 @@ class RepositoryImpl @Inject constructor(
         paqueteDao.entregaFallida(cajaId, motivo)
     }
 
-    override suspend fun obtenerPaquetesNoEntregados(): List<Paquete> {
-        val rutas = rutaDao.rutasEnReparto()
-        val paquetesEntities = mutableListOf<PaqueteEntity>()
-        rutas.forEach { paquetesEntities.addAll(paqueteDao.obtenerPorRuta(it.id)) }
-        val paquetes = paquetesEntities.filter { it.estado >= 2 }.map { it.toDomain() }
-        return paquetes
-    }
-
     override suspend fun terminarEntrega() {
         val rutas = rutaDao.rutasEnReparto()
-        val paquetes = mutableListOf<PaqueteEntity>()
         rutas.forEach {
-            paquetes.addAll(paqueteDao.obtenerPorRuta(it.id))
+            rutaDao.terminar(it)
         }
         firestoreService.terminarRutas(rutas.map { it.toDomain() })
-        firestoreService.terminarPaquetes(paquetes.map { it.toDomain() })
     }
 
     override suspend fun getPaquetesByRoute(routeId: String): List<Paquete> {
@@ -133,5 +122,6 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun registrarEntrega(paqueteID: String, data: Map<String, Any>) {
         paqueteDao.entregar(paqueteID, Date())
+        firestoreService.entregarPaquete(paqueteID, data)
     }
 }
