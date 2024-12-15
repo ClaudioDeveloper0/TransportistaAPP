@@ -87,6 +87,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     //fragments
+    implementation ("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+    implementation ("com.google.android.material:material:1.11.0")
+
     implementation(libs.androidx.fragment.ktx)
 
     implementation(libs.androidx.core.ktx)

@@ -27,4 +27,7 @@
     <string name="tel_fono_del_receptor">Teléfono del receptor</string>
     <string name="confirmar_entrega">Confirmar entrega</string>
     <string name="tel_fono">Teléfono:</string>
+    <string name="alinea_el_codigo">Alinea el código dentro del marco</string>
+    <string name="ingresar_manualmente">Ingresar manualmente</string>
+    <string name="escanea_el_codigo">Escanea el código de barras</string>
 </resources>
