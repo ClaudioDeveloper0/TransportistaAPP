@@ -116,5 +116,5 @@
         android:background="@drawable/custom_button"
         android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/tvExplicacionMotivoFallo"
-        tools:text="Registrar Fallo" />
+        android:text="@string/registrar_fallo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
