@@ -14,6 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.transportistaapp.R
 import com.example.transportistaapp.databinding.FragmentEntregarPaqueteBinding
 import com.example.transportistaapp.domain.model.Paquete
+import com.example.transportistaapp.ui.entregasfallos.FormularioEntregaFallosFragment
+import com.example.transportistaapp.ui.pantallaReparto.RepartoActivity
 import com.example.transportistaapp.ui.pantallaReparto.fragments.BarcodeScannerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -55,13 +57,19 @@ class EntregarPaqueteFragment : Fragment() {
                             is EntregarPaqueteState.Success -> successState(it.paquete)
                             is EntregarPaqueteState.Error -> errorState(it.error)
                             EntregarPaqueteState.BackCajas -> {
+                                binding.tvError.text = ""
                                 parentFragmentManager.popBackStack()
                             }
+                            is EntregarPaqueteState.FormularioInvalido -> formInvalid(it.error)
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun formInvalid(error: String) {
+        binding.tvError.text = error
     }
 
     private fun successState(p: Paquete) {
@@ -128,8 +136,24 @@ class EntregarPaqueteFragment : Fragment() {
                 binding.editTextNombre.text.toString(),
                 binding.editTextRut.text.toString(),
                 binding.editTextTelefono.text.toString(),
-                paquete.id
+                paquete.id,
+                binding.checkboxReceptor.isChecked
             )
+        }
+        binding.btnEntregaFallida.setOnClickListener{
+            val destino = FormularioEntregaFallosFragment().apply {
+                arguments = Bundle().apply {
+                    putString("codigo", paquete.id)
+                    putString("nombre", paquete.receptor)
+                    putString("telefono", paquete.contacto)
+                }
+            }
+            val fragmentContainerId =
+                (requireActivity() as RepartoActivity).binding.fragmentContainer.id
+            parentFragmentManager.beginTransaction()
+                .replace(fragmentContainerId, destino)
+                .addToBackStack(null) // Agregar a la pila para permitir volver atrás
+                .commit()
         }
     }
 }

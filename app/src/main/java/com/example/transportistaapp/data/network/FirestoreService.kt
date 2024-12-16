@@ -31,11 +31,12 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
             )
         }
         val rutasIds = rutas.map { it.id }
-        val rutasChunks = rutasIds.chunked(10) // Divide la lista en partes de máximo 10 elementos
+        val rutasChunks = rutasIds.chunked(10)
         val paquetes = mutableListOf<Paquete>()
         for (chunk in rutasChunks) {
             val paquetesSnapshot = db.collection("Paquetes")
                 .whereIn("ruta", chunk)
+                .whereNotEqualTo("estado", 3)
                 .get()
                 .await()
             paquetes.addAll(paquetesSnapshot.documents.map { p ->
@@ -125,5 +126,15 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
         )
         db.collection("Paquetes").document(paqueteID)
             .update("estado", 3, "historial", FieldValue.arrayUnion(historial))
+    }
+    suspend fun entregaFallidaPaquete(paqueteID:String, motivo:String) {
+        val historial = hashMapOf(
+            "detalles" to motivo,
+            "estado" to 4,
+            "fecha" to Timestamp(Date())
+        )
+
+        db.collection("Paquetes").document(paqueteID)
+            .update("estado", 4, "ruta", "", "historial", FieldValue.arrayUnion(historial))
     }
 }

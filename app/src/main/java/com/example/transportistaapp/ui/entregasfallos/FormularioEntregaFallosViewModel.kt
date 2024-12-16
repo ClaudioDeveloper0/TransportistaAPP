@@ -25,7 +25,7 @@ class FormularioEntregaFallosViewModel @Inject constructor(
                 cajaNoEntregadaUseCase(paquete, motivo)
                 _state.value = FormularioEntregaFallosState.Success
             } catch (e: Exception) {
-                _state.value = FormularioEntregaFallosState.Error
+                _state.value = FormularioEntregaFallosState.Error(e.toString())
             }
         }
     }

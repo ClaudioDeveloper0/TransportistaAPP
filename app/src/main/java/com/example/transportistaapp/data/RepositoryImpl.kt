@@ -64,7 +64,8 @@ class RepositoryImpl @Inject constructor(
             ruta.paquetes = paquetes.map { it.toDomain() }
             ruta
         }
-        return rutas
+        val rutasConPaquetes = rutas.filter { it.paquetes.isNotEmpty() }
+        return rutasConPaquetes
     }
 
     override suspend fun marcarCajaEntregada(cajaId: String, fechaEntrega: Date) {
@@ -73,6 +74,7 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun marcarCajaNoEntregada(cajaId: String, motivo: String) {
         paqueteDao.entregaFallida(cajaId, motivo)
+        firestoreService.entregaFallidaPaquete(cajaId, motivo)
     }
 
     override suspend fun terminarEntrega() {
@@ -84,7 +86,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPaquetesByRoute(routeId: String): List<Paquete> {
-        val paquetes = paqueteDao.obtenerPorRuta(routeId)
+        val paquetes = paqueteDao.obtenerPorRutaParaEntregar(routeId)
         return paquetes.map { it.toDomain() }
     }
 
@@ -96,6 +98,7 @@ class RepositoryImpl @Inject constructor(
     override suspend fun comenzarEntregas() {
         val idRutas = mutableListOf<String>()
         val idPaquetes = mutableListOf<String>()
+
         rutaDao.getAll().map {
             if (it.cargado) {
                 idRutas.add(it.id)
@@ -105,12 +108,13 @@ class RepositoryImpl @Inject constructor(
         }.forEach { rutaEntity ->
             rutaDao.updateRuta(rutaEntity)
             if (rutaEntity.enReparto) {
-                paqueteDao.obtenerPorRuta(rutaEntity.id).forEach { paqueteEntity ->
-                    idPaquetes.add(paqueteEntity.id)
-                    paqueteEntity.estado = 2
-                    paqueteDao.update(paqueteEntity)
-                    Log.d("MaybeaLog", paqueteDao.get(paqueteEntity.id).toString())
-                }
+                paqueteDao.obtenerPorRuta(rutaEntity.id).filter { it.estado != 3 }
+                    .forEach { paqueteEntity ->
+                        idPaquetes.add(paqueteEntity.id)
+                        paqueteEntity.estado = 2
+                        paqueteDao.update(paqueteEntity)
+                        Log.d("MaybeaLog", paqueteDao.get(paqueteEntity.id).toString())
+                    }
             }
         }
         firestoreService.comenzarEntregas(idRutas, idPaquetes)

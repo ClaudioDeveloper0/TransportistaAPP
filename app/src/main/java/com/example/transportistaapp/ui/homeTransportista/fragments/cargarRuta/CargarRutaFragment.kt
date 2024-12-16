@@ -100,6 +100,7 @@ class CargarRutaFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnEscanearCaja.setOnClickListener {
+            binding.previewView.visibility = View.VISIBLE
             startCamera()
         }
     }

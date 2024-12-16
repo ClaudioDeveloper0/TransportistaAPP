@@ -2,8 +2,8 @@ package com.example.transportistaapp.ui.pantallaReparto.fragments.entregarPaquet
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.transportistaapp.domain.useCases.RegistrarEntregaUseCase
 import com.example.transportistaapp.domain.useCases.GetPaqueteUseCase
+import com.example.transportistaapp.domain.useCases.RegistrarEntregaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +31,42 @@ class EntregarPaqueteViewModel @Inject constructor(
         }
     }
 
-    fun registrarEntrega(nombre: String, rut: String, telefono: String, paqueteID: String) {
+    fun registrarEntrega(
+        nombre: String,
+        rut: String,
+        telefono: String,
+        paqueteID: String,
+        recibeCheckBox: Boolean
+    ) {
+        if (recibeCheckBox) {
+            if (rut.isEmpty()) {
+                _state.value =
+                    EntregarPaqueteState.FormularioInvalido("Debes ingresar el rut de quien recibe")
+                return
+            } else if (rut.length > 9 || rut.length < 8) {
+                _state.value =
+                    EntregarPaqueteState.FormularioInvalido("El rut debe tener entre 8 y 9 digitos!")
+                return
+            }
+        } else {
+            if (nombre.isEmpty() || rut.isEmpty() || telefono.isEmpty()) {
+                _state.value =
+                    EntregarPaqueteState.FormularioInvalido("Debes completar todos los campos")
+                return
+            } else if (rut.length > 9 || rut.length < 8) {
+                _state.value =
+                    EntregarPaqueteState.FormularioInvalido("El rut debe tener entre 8 y 9 digitos!")
+                return
+            } else if (telefono.length < 9) {
+                _state.value =
+                    EntregarPaqueteState.FormularioInvalido("El telefono debe contener al menos 9 digitos")
+                return
+            } else if (telefono.length > 12) {
+                _state.value =
+                    EntregarPaqueteState.FormularioInvalido("El telefono debe contener al 12 o menos digitos")
+                return
+            }
+        }
         val data = mapOf(
             "nombre" to nombre,
             "rut" to rut,

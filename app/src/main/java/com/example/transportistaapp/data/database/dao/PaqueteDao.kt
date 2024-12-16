@@ -18,6 +18,10 @@ interface PaqueteDao {
     @Query("Select * FROM paquetes_table WHERE ruta=:ruta")
     suspend fun obtenerPorRuta(ruta:String):List<PaqueteEntity>
 
+    @Query("Select * FROM paquetes_table WHERE ruta=:ruta AND (estado = 1 OR estado = 4)")
+    suspend fun obtenerPorRutaParaEntregar(ruta:String):List<PaqueteEntity>
+
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(paquete: PaqueteEntity)
 
