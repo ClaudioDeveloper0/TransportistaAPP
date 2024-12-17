@@ -57,7 +57,8 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
                     ruta = p.getString("ruta") ?: "",
                     estado = estado,
                     coordenadas = (p.get("coordenadas") as? List<*>)?.mapNotNull { it as? Double }
-                        ?: emptyList()
+                        ?: emptyList(),
+                    referencia = p.getString("referencia") ?: ""
                 )
                 paq
             })
@@ -72,6 +73,9 @@ class FirestoreService @Inject constructor(private val db: FirebaseFirestore) {
         return try {
             val document = db.collection("Usuarios").document(user.uid).get().await()
             val tipo = document.get("tipo") as? Long
+            db.collection("Usuarios").document(user.uid)
+                .update("ultimaConexion", Timestamp(Date()))
+
             tipo == 0L
         } catch (e: Exception) {
             Log.d(TAG, "Error fetching document: ", e)

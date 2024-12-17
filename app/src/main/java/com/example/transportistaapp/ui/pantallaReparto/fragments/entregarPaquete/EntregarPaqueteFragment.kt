@@ -77,6 +77,7 @@ class EntregarPaqueteFragment : Fragment() {
         binding.tvPaqueteCodigo.text = p.id
         binding.tvRecibeValue.text = p.receptor
         binding.tvTelefonoValue.text = p.contacto
+        binding.tvReferencia.text = if (p.referencia == "") {"No hay referencia"} else {p.referencia}
     }
 
     private fun errorState(error: String) {

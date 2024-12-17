@@ -34,4 +34,5 @@
     <string name="registrar_entrega_fallida">Registrar entrega fallida</string>
     <string name="explicacion_motivo_fallo">Este mensaje será mostrado tanto como al supervisor como a la persona que quiera rastrear el código de este pedido</string>
     <string name="registrar_fallo">Registrar Fallo</string>
+    <string name="referencia">Referencia:</string>
 </resources>

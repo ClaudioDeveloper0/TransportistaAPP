@@ -31,7 +31,7 @@ interface PaqueteDao {
     @Query("Select p.* FROM paquetes_table p JOIN rutas_table r ON r.id = p.ruta WHERE r.en_reparto = 1")
     suspend fun obtenerEnReparto() : List<PaqueteEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(paquetes:List<PaqueteEntity>)
 
     @Query("UPDATE paquetes_table SET fechaEntrega=:fechaEntrega, estado=3 WHERE id=:paqueteId")

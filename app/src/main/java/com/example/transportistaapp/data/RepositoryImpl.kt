@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.transportistaapp.data.database.dao.LastLoginDao
 import com.example.transportistaapp.data.database.dao.PaqueteDao
 import com.example.transportistaapp.data.database.dao.RutaDao
+import com.example.transportistaapp.data.database.entities.PaqueteEntity
 import com.example.transportistaapp.data.database.entities.toDomain
 import com.example.transportistaapp.data.database.entities.toRoom
 import com.example.transportistaapp.data.network.FirestoreService
@@ -42,14 +43,24 @@ class RepositoryImpl @Inject constructor(
         if (transportista == lastLogin.get()?.uid && rutaDao.rutasEnReparto().isNotEmpty()) {
             return
         } else {
+            val cargadas = rutaDao.getCargadas()
+            val paquetesCargados = mutableListOf<PaqueteEntity>()
+            if (cargadas.isNotEmpty()) {
+                cargadas.forEach {
+                    paquetesCargados.addAll(paqueteDao.obtenerPorRuta(it.id))
+                }
+            }
             paqueteDao.deleteAll()
             rutaDao.deleteAll()
             val rutasList = firestoreService.getRutasPorTransportista(transportista)
             rutaDao.insertAll(rutasList.map { it.toRoom() })
             rutasList.forEach { ruta ->
-                val paquetesEntityList = ruta.paquetes.map { it.toRoom() }
-                paqueteDao.insertAll(paquetesEntityList)
+                if (ruta.id !in cargadas.map { it.id }) {
+                    val paquetesEntityList = ruta.paquetes.map { it.toRoom() }
+                    paqueteDao.insertAll(paquetesEntityList)
+                }
             }
+            paqueteDao.insertAll(paquetesCargados)
         }
     }
 

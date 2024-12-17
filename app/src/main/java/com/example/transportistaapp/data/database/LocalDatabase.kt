@@ -3,8 +3,12 @@ package com.example.transportistaapp.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.transportistaapp.data.database.dao.*
-import com.example.transportistaapp.data.database.entities.*
+import com.example.transportistaapp.data.database.dao.LastLoginDao
+import com.example.transportistaapp.data.database.dao.PaqueteDao
+import com.example.transportistaapp.data.database.dao.RutaDao
+import com.example.transportistaapp.data.database.entities.LastLogin
+import com.example.transportistaapp.data.database.entities.PaqueteEntity
+import com.example.transportistaapp.data.database.entities.RutaEntity
 
 
 @Database(
@@ -13,7 +17,7 @@ import com.example.transportistaapp.data.database.entities.*
         RutaEntity::class,
         LastLogin::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
 
 )

@@ -15,9 +15,11 @@ interface RutaDao {
     @Query("Select * FROM rutas_table")
     suspend fun getAll(): List<RutaEntity>
 
+    @Query("Select * FROM rutas_table WHERE cargado = 1")
+    suspend fun getCargadas(): List<RutaEntity>
+
     @Query("Select * FROM rutas_table WHERE en_reparto=1")
     suspend fun rutasEnReparto(): List<RutaEntity>
-
 
     @Query("UPDATE rutas_table SET cargado=1 WHERE id=:ruta")
     suspend fun cargarRuta(ruta: String)
@@ -25,7 +27,7 @@ interface RutaDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateRuta(rutaEntity: RutaEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(rutas: List<RutaEntity>)
 
     @Query("DELETE FROM rutas_table")

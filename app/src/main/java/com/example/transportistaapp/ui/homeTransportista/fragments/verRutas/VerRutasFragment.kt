@@ -60,6 +60,9 @@ class VerRutasFragment : Fragment() {
         binding.btnIniciarEntregas.setOnClickListener {
             viewModel.comenzarEntregas()
         }
+        binding.btnActualizar.setOnClickListener{
+            viewModel.actualizar()
+        }
     }
 
     private fun initAdapter() {

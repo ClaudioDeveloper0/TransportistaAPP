@@ -6,6 +6,7 @@ import java.util.Date
 data class Paquete (
     val id : String,
     val direccion : String,
+    val referencia : String,
     val ruta : String,
     var contacto : String,
     var receptor : String,

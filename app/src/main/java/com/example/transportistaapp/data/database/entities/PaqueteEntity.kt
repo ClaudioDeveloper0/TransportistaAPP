@@ -25,6 +25,7 @@ data class PaqueteEntity(
     @ColumnInfo(name = "receptor") val receptor: String,
     @ColumnInfo(name = "fono") val fono: String,
     @ColumnInfo(name = "direccion") val direccion: String,
+    @ColumnInfo(name = "referencia") val referencia: String,
     @ColumnInfo(name = "estado") var estado: Int,
     @ColumnInfo(name = "ruta") val ruta: String,
     @ColumnInfo(name = "fechaEntrega") val fecha: Date = Date(),
@@ -49,7 +50,8 @@ fun PaqueteEntity.toDomain(): Paquete {
             else -> "Estado desconocido? no deberías estar viendo esto..."
         },
         detalles = detalles,
-        coordenadas = coordenadas
+        coordenadas = coordenadas,
+        referencia = referencia
     )
 }
 
@@ -71,6 +73,7 @@ fun Paquete.toRoom(): PaqueteEntity {
         ruta = ruta,
         fecha = fecha,
         detalles = detalles,
-        coordenadas = coordenadas
+        coordenadas = coordenadas,
+        referencia = referencia
     )
 }

@@ -41,14 +41,5 @@
         android:textColor="@color/text_color_gris"
         android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/btnManuallyEnter"
-        android:layout_width="239dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/custom_button"
-        android:text="@string/ingresar_manualmente"
-        android:textColor="@android:color/white" />
 
 </FrameLayout>
